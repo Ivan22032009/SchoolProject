@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+#map {
+    height: 60vh;
+    width: 100%;
+}
+
+#controls {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#controls button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#controls button:hover {
+    background-color: #45a049;
+}
+
+#points-list {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-top: 2px solid #4CAF50;
+}
+
+#points-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+#points-list li {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#points-list button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#points-list button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+#points-list button:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+#auth-modal {
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#auth-modal label {
+    display: block;
+    margin-top: 10px;
+}
+
+#auth-modal input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+#auth-modal button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#auth-modal button:hover {
+    background-color: #45a049;
+}
+
+#auth-modal {
+    z-index: 1000;
+}
+
+#map {
+    z-index: 0;
+}
