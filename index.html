@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта Чистоти Школи</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <header>
+        <h1>Карта Чистоти Школи</h1>
+        <nav>
+            <span id="welcome-message"></span>
+            <button id="login" style="display:inline-block;">Увійти</button>
+            <button id="register" style="display:inline-block;">Реєстрація</button>
+            <button id="logout" style="display:none;">Вийти</button>
+        </nav>
+    </header>
+
+    <main>
+        <div id="map"></div>
+        <div id="controls">
+            <button id="add-point">Додати нову точку</button>
+        </div>
+        <div id="points-list">
+            <h2>Точки прибирання</h2>
+            <ul id="points"></ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Карта Чистоти Школи | Разом зробимо наше місто чистішим!</p>
+    </footer>
+
+    <div id="auth-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border:1px solid #ccc; border-radius:5px; z-index:1000;">
+        <h2 id="auth-title">Реєстрація</h2>
+        <form id="auth-form">
+            <label for="username">Ім'я користувача:</label>
+            <input type="text" id="username" required><br>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" required><br>
+            <button type="submit">Підтвердити</button>
+        </form>
+        <button id="close-modal">Закрити</button>
+    </div>
+
+    
