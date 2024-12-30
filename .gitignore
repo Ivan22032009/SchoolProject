@@ -1,0 +1,3 @@
+eval "$(ssh-agent -s)"
+eval "$(ssh-agent -s)".pub
+.DS_Store
