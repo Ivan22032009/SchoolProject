@@ -3,51 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта Чистоти Школи</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>EcoTrack - Екологічна ініціатива Умані</title>
 </head>
 <body>
     <header>
-        <h1>Карта Чистоти Школи</h1>
         <nav>
-            <span id="welcome-message"></span>
-            <button id="login" style="display:inline-block;">Увійти</button>
-            <button id="register" style="display:inline-block;">Реєстрація</button>
-            <button id="logout" style="display:none;">Вийти</button>
+            <a href="#" class="logo">🌱 EcoTrack</a>
+            <div class="nav-links">
+                <a href="#about">Про проект</a>
+                <a href="#points">Пункти прийому</a>
+                <a href="#leaderboard">Рейтинг</a>
+                <a href="#" id="loginBtn">Увійти</a>
+            </div>
         </nav>
     </header>
 
-    <main>
-        <div id="map"></div>
-        <div id="controls">
-            <button id="add-point">Додати нову точку</button>
+    <section class="hero">
+        <h1>Зробімо наше місто чистішим разом</h1>
+        <p>EcoTrack – це ініціатива, що об'єднує небайдужих жителів Умані у спільній справі збереження довкілля</p>
+    </section>
+
+    <section id="about" class="section">
+        <h2>Наша мета</h2>
+        <div class="mission-cards">
+            <div class="mission-card">
+                <h3>🌿 Екологічна свідомість</h3>
+                <p>Формуємо культуру відповідального поводження з відходами серед жителів міста</p>
+            </div>
+            <div class="mission-card">
+                <h3>♻️ Переробка</h3>
+                <p>Спрощуємо процес сортування та здачі вторсировини через зручну мережу пунктів прийому</p>
+            </div>
+            <div class="mission-card">
+                <h3>🤝 Спільнота</h3>
+                <p>Створюємо активну спільноту екосвідомих громадян, які дбають про майбутнє свого міста</p>
+            </div>
         </div>
-        <div id="points-list">
-            <h2>Точки прибирання</h2>
-            <ul id="points"></ul>
+    </section>
+
+    <section id="points" class="section">
+        <h2>Пункти прийому</h2>
+        <div class="points-grid">
+            <div class="point-card">
+                <h3>Пункт прийому "ЕкоСвіт"</h3>
+                <div class="point-info">
+                    <p><strong>Адреса:</strong> вул. Європейська, 65</p>
+                    <p><strong>Приймає:</strong> пластик, папір, скло</p>
+                    <p><strong>Графік:</strong> 09:00 - 18:00</p>
+                </div>
+            </div>
+            <div class="point-card">
+                <h3>Центр сортування "Еко+"</h3>
+                <div class="point-info">
+                    <p><strong>Адреса:</strong> вул. Незалежності, 23</p>
+                    <p><strong>Приймає:</strong> всі види відходів</p>
+                    <p><strong>Графік:</strong> 10:00 - 17:00</p>
+                </div>
+            </div>
+            <div class="point-card">
+                <h3>Пункт "Зелений"</h3>
+                <div class="point-info">
+                    <p><strong>Адреса:</strong> вул. Грушевського, 115</p>
+                    <p><strong>Приймає:</strong> пластик, метал</p>
+                    <p><strong>Графік:</strong> 08:00 - 16:00</p>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
+
+    <section id="leaderboard" class="section">
+        <h2>Рейтинг учасників</h2>
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Місце</th>
+                    <th>Учасник</th>
+                    <th>Здано (кг)</th>
+                    <th>Бали</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вхід в систему</h2>
+            <div class="success-message" id="loginSuccess">
+                Успішний вхід в систему!
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">Увійти</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Modal -->
+    <div id="dashboardModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Особистий кабінет</h2>
+            <div class="success-message" id="recycleSuccess">
+                Дані успішно збережено!
+            </div>
+            <form id="recycleForm">
+                <div class="form-group">
+                    <label for="paperWeight">Кількість макулатури (кг):</label>
+                    <input type="number" id="paperWeight" min="0" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="recyclePoint">Пункт прийому:</label>
+                    <select id="recyclePoint" required>
+                        <option value="ecosvit">ЕкоСвіт</option>
+                        <option value="ecoplus">Еко+</option>
+                        <option value="green">Зелений</option>
+                    </select>
+                </div>
+                <button type="submit">Зберегти</button>
+            </form>
+            <div id="userStats">
+                <h3>Ваша статистика</h3>
+                <p>Загальна кількість: <span id="totalWeight">0</span> кг</p>
+                <p>Бали: <span id="totalPoints">0</span></p>
+            </div>
+        </div>
+    </div>
 
     <footer>
-        <p>© 2024 Карта Чистоти Школи | Разом зробимо наше місто чистішим!</p>
+        <div class="footer-content">
+            <p>EcoTrack © 2024 | Проект екологічної ініціативи міста Умань</p>
+        </div>
     </footer>
-
-    <div id="auth-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border:1px solid #ccc; border-radius:5px; z-index:1000;">
-        <h2 id="auth-title">Реєстрація</h2>
-        <form id="auth-form">
-            <label for="username">Ім'я користувача:</label>
-            <input type="text" id="username" required><br>
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" required><br>
-            <button type="submit">Підтвердити</button>
-        </form>
-        <button id="close-modal">Закрити</button>
-    </div>
 </body>
 <script src="script.js"></script>
 </html>
-
-    
