@@ -22,6 +22,8 @@ app.options('*', cors(corsOptions));
 // Парсинг JSON
 app.use(express.json());
 
+app.use(cors({ origin: '*' })); 
+
 // Підключення до MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecotrack')
   .then(() => console.log('✅ Підключено до MongoDB'))
