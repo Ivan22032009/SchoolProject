@@ -1,5 +1,5 @@
 # Використовуємо Node.js 18
-FROM node:23.8.0
+FROM node:22.14.0
 
 WORKDIR /app
 
