@@ -15,7 +15,7 @@
                 <a href="about.html">Правельне сортування</a>
                 <a href="points.html">Пункти прийому</a>
                 <a href="leaderboard.html">Рейтинг</a>
-                <a href="#" id="loginBtn">Увійти</a>
+                <a href="#" class="authButton">Увійти</a>
             </div>
         </nav>
     </header>
@@ -56,6 +56,51 @@
         </div>
     </footer>
 
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+      
+          <!-- Форма входу -->
+          <form id="loginForm" class="active-form">
+            <div class="form-group">
+              <label>Email:</label>
+              <input type="email" id="loginEmail" required>
+            </div>
+            <div class="form-group">
+              <label>Пароль:</label>
+              <input type="password" id="loginPassword" required>
+            </div>
+            <button type="submit">Увійти</button>
+            <a href="#" id="switchToRegister">Зареєструватися</a>
+          </form>
+      
+          <!-- Форма реєстрації -->
+          <form id="registerForm" class="hidden-form">
+            <div class="form-group">
+              <label>Ім'я:</label>
+              <input type="text" id="registerFirstName" required>
+            </div>
+            <div class="form-group">
+              <label>Прізвище:</label>
+              <input type="text" id="registerLastName" required>
+            </div>
+            <div class="form-group">
+              <label>Email:</label>
+              <input type="email" id="registerEmail" required>
+            </div>
+            <div class="form-group">
+              <label>Пароль:</label>
+              <input type="password" id="registerPassword" required>
+            </div>
+            <button type="submit">Зареєструватися</button>
+            <a href="#" id="switchToLogin">Вже маю акаунт</a>
+          </form>
+        </div>
+      </div>
+
+<div id="userGreeting" style="display: none;">
+  <h2>Вітаємо, <span id="userFullName"></span>!</h2>
+</div>
     <script src="script.js"></script>
 </body>
 </html>

@@ -6,18 +6,33 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 const app = express();
+
+// Налаштування CORS
+const corsOptions = {
+  origin: ['http://localhost:5500', 'http://127.0.0.1:5500'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+app.use(cors(corsOptions));
+
+// Обробка OPTIONS-запитів
+app.options('*', cors(corsOptions));
+
+// Парсинг JSON
 app.use(express.json());
-app.use(cors());
 
 // Підключення до MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Підключено до MongoDB'))
-  .catch(err => console.error('Помилка підключення:', err));
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecotrack')
+  .then(() => console.log('✅ Підключено до MongoDB'))
+  .catch(err => console.error('❌ Помилка підключення:', err));
 
 // Схема користувача
 const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true },
-  password: String,
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
   totalWeight: { type: Number, default: 0 },
   totalPoints: { type: Number, default: 0 }
 });
@@ -26,48 +41,81 @@ const User = mongoose.model('User', userSchema);
 // Реєстрація
 app.post('/api/register', async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = new User({
-      email: req.body.email,
-      password: hashedPassword
-    });
+    const { firstName, lastName, email, password } = req.body;
+    
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).json({ error: "Заповніть усі поля" });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Користувач з таким email вже існує" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ firstName, lastName, email, password: hashedPassword });
     await user.save();
-    res.status(201).send('Користувача створено');
+
+    res.status(201).json({ message: "Користувача створено" });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 
 // Вхід
 app.post('/api/login', async (req, res) => {
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send('Користувача не знайдено');
-  
-  const validPass = await bcrypt.compare(req.body.password, user.password);
-  if (!validPass) return res.status(400).send('Невірний пароль');
-  
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-  res.header('auth-token', token).send({ token, email: user.email });
-});
-
-// Додати дані
-app.post('/api/add-data', async (req, res) => {
   try {
-    const user = await User.findById(req.body.userId);
-    user.totalWeight += req.body.weight;
-    user.totalPoints += req.body.weight * 5;
-    await user.save();
-    res.send('Дані оновлено');
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Заповніть усі поля" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ error: "Користувача не знайдено" });
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ error: "Невірний пароль" });
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
+    
+    res.json({ 
+      token, 
+      email: user.email,
+      firstName: user.firstName, 
+      lastName: user.lastName
+    });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Рейтинг
-app.get('/api/leaderboard', async (req, res) => {
-  const users = await User.find().sort({ totalWeight: -1 });
-  res.send(users);
+// Отримання даних користувача
+app.get('/api/user', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: "Неавторизований запит" });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+    
+    const user = await User.findById(decoded._id).select('firstName lastName');
+    if (!user) {
+      return res.status(404).json({ error: "Користувача не знайдено" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(401).json({ error: "Недійсний або прострочений токен" });
+  }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Сервер працює на порті ${PORT}`));
+// Запуск сервера
+const PORT = process.env.PORT || 5500;
+app.listen(PORT, () => console.log(`🟢 Сервер працює на порті ${PORT}`));

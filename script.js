@@ -1,104 +1,144 @@
-// Модальне вікно
-const loginModal = document.getElementById("loginModal");
-const loginForm = document.getElementById("loginForm");
-let authToken = null;
+document.addEventListener('DOMContentLoaded', () => {
+  const loginModal = document.getElementById("loginModal");
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const switchToRegister = document.getElementById("switchToRegister");
+  const switchToLogin = document.getElementById("switchToLogin");
+  const userNavElements = document.querySelectorAll(".userNav");
+  const authButtons = document.querySelectorAll(".authButton");
+  let authToken = localStorage.getItem('authToken') || null;
 
-// Відкрити модальне вікно
-document.querySelectorAll('.loginBtn').forEach(btn => {
-  btn.addEventListener('click', () => loginModal.style.display = 'block');
-});
-
-// Реєстрація/вхід
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const isRegister = e.submitter.id === 'registerBtn';
-
-  try {
-    const response = await fetch(`/api/${isRegister ? 'register' : 'login'}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    
-    if (!response.ok) throw new Error(await response.text());
-    
-    if (isRegister) {
-      alert('Реєстрація успішна! Увійдіть.');
-    } else {
-      const data = await response.json();
-      authToken = data.token;
-      localStorage.setItem('authToken', authToken);
-      updateUI(data.email);
-    }
-  } catch (error) {
-    alert(error.message);
-  }
-});
-
-// Додати дані
-document.getElementById('recycleForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const weight = parseFloat(document.getElementById('weight').value);
-
-  try {
-    const response = await fetch('/api/add-data', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      },
-      body: JSON.stringify({ weight })
-    });
-    
-    if (!response.ok) throw new Error(await response.text());
-    
-    updateLeaderboard();
-    alert('Дані додано!');
-  } catch (error) {
-    alert(error.message);
-  }
-});
-
-// Оновлення інтерфейсу
-function updateUI(email) {
-  document.getElementById('userEmail').textContent = email;
-  document.getElementById('profileSection').style.display = 'block';
-  document.querySelectorAll('.loginBtn').forEach(btn => btn.style.display = 'none');
-}
-
-// Отримати рейтинг
-async function updateLeaderboard() {
-  const response = await fetch('/api/leaderboard');
-  const users = await response.json();
-  
-  const tbody = document.querySelector('.leaderboard-table tbody');
-  tbody.innerHTML = users.map((user, index) => `
-    <tr>
-      <td>${index + 1}</td>
-      <td>${user.email}</td>
-      <td>${user.totalWeight}</td>
-      <td>${user.totalPoints}</td>
-    </tr>
-  `).join('');
-}
-
-// Перевірка авторизації при завантаженні
-window.addEventListener('load', async () => {
-  authToken = localStorage.getItem('authToken');
   if (authToken) {
-    try {
-      const response = await fetch('/api/validate', { 
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
-      if (response.ok) {
-        const user = await response.json();
-        updateUI(user.email);
-      }
-    } catch (error) {
-      localStorage.removeItem('authToken');
-    }
+      checkAuthStatus();
+  } else {
+      updateAuthButtons(false);
   }
-  updateLeaderboard();
+
+  async function checkAuthStatus() {
+      try {
+          const response = await fetch('http://localhost:5500/api/user', {
+              method: 'GET',
+              headers: { 'Authorization': `Bearer ${authToken}` }
+          });
+
+          if (!response.ok) {
+              throw new Error("Неавторизований користувач");
+          }
+
+          const user = await response.json();
+          userNavElements.forEach(nav => {
+              nav.textContent = `${user.firstName} ${user.lastName}`;
+              nav.style.display = 'inline-block';
+          });
+          updateAuthButtons(true);
+      } catch (error) {
+          console.error(error.message);
+          localStorage.removeItem('authToken');
+          updateAuthButtons(false);
+      }
+  }
+
+  function updateAuthButtons(isLoggedIn) {
+      authButtons.forEach(button => {
+          if (isLoggedIn) {
+              button.textContent = "Вийти";
+              button.removeEventListener('click', openLoginModal);
+              button.addEventListener('click', logout);
+          } else {
+              button.textContent = "Увійти";
+              button.removeEventListener('click', logout);
+              button.addEventListener('click', openLoginModal);
+          }
+      });
+  }
+
+  function openLoginModal() {
+      loginModal.style.display = 'block';
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+  }
+
+  function logout() {
+      localStorage.removeItem('authToken');
+      userNavElements.forEach(nav => nav.style.display = 'none');
+      updateAuthButtons(false);
+      location.reload();
+  }
+
+  document.querySelectorAll('.loginBtn').forEach(btn => {
+      btn.addEventListener('click', openLoginModal);
+  });
+
+  document.querySelector('.close').addEventListener('click', () => {
+      loginModal.style.display = 'none';
+  });
+
+  switchToRegister.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+  });
+
+  switchToLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      registerForm.style.display = 'none';
+      loginForm.style.display = 'block';
+  });
+
+  loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+          const response = await fetch('http://localhost:5500/api/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password })
+          });
+
+          if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || "Помилка входу");
+          }
+
+          const { token, firstName, lastName } = await response.json();
+          localStorage.setItem('authToken', token);
+          userNavElements.forEach(nav => {
+              nav.textContent = `${firstName} ${lastName}`;
+              nav.style.display = 'inline-block';
+          });
+          updateAuthButtons(true);
+          loginModal.style.display = 'none';
+      } catch (error) {
+          alert(error.message);
+      }
+  });
+
+  registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const firstName = document.getElementById('registerFirstName').value;
+      const lastName = document.getElementById('registerLastName').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+
+      try {
+          const response = await fetch('http://localhost:5500/api/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ firstName, lastName, email, password }),
+          });
+
+          if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || "Помилка реєстрації");
+          }
+
+          alert('Реєстрація успішна! Увійдіть.');
+          registerForm.reset();
+          switchToLogin.click();
+      } catch (error) {
+          alert(error.message);
+      }
+  });
 });
