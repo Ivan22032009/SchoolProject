@@ -6,15 +6,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const switchToLogin = document.getElementById("switchToLogin");
   const userNavElements = document.querySelectorAll(".userNav");
   const authButtons = document.querySelectorAll(".authButton");
+  const submitSection = document.getElementById("submitSection");
+  const submitModal = document.getElementById("submitModal");
+  const submitWasteBtn = document.getElementById("submitWaste");
+  const wasteForm = document.getElementById("wasteForm");
+  const leaderboardTable = document.querySelector(".leaderboard-table tbody");
+
   let authToken = localStorage.getItem('authToken') || null;
 
+  // Додавання обробника закриття модального вікна
+  document.querySelectorAll(".close").forEach(button => {
+      button.addEventListener("click", () => {
+          loginModal.style.display = "none";
+          submitModal.style.display = "none";
+      });
+  });
+
+   updateLeaderboard();
+  // Перевірка авторизації при завантаженні сторінки
   if (authToken) {
       checkAuthStatus();
   } else {
       updateAuthButtons(false);
+      submitSection.style.display = 'none';
   }
 
   async function checkAuthStatus() {
+      if (!authToken) {
+          updateAuthButtons(false);
+          return;
+      }
+
       try {
           const response = await fetch('http://localhost:5500/api/user', {
               method: 'GET',
@@ -31,8 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
               nav.style.display = 'inline-block';
           });
           updateAuthButtons(true);
+          submitSection.style.display = 'block';
+          updateLeaderboard();
       } catch (error) {
-          console.error(error.message);
+          console.error('Помилка перевірки авторизації:', error.message);
           localStorage.removeItem('authToken');
           updateAuthButtons(false);
       }
@@ -62,16 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('authToken');
       userNavElements.forEach(nav => nav.style.display = 'none');
       updateAuthButtons(false);
+      submitSection.style.display = 'none';
       location.reload();
   }
-
-  document.querySelectorAll('.loginBtn').forEach(btn => {
-      btn.addEventListener('click', openLoginModal);
-  });
-
-  document.querySelector('.close').addEventListener('click', () => {
-      loginModal.style.display = 'none';
-  });
 
   switchToRegister.addEventListener('click', (e) => {
       e.preventDefault();
@@ -104,12 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const { token, firstName, lastName } = await response.json();
           localStorage.setItem('authToken', token);
-          userNavElements.forEach(nav => {
-              nav.textContent = `${firstName} ${lastName}`;
-              nav.style.display = 'inline-block';
-          });
-          updateAuthButtons(true);
-          loginModal.style.display = 'none';
+          location.reload();
       } catch (error) {
           alert(error.message);
       }
@@ -141,4 +153,58 @@ document.addEventListener('DOMContentLoaded', () => {
           alert(error.message);
       }
   });
+
+  submitWasteBtn.addEventListener('click', () => {
+      submitModal.style.display = 'block';
+  });
+
+  wasteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const weight = parseFloat(document.getElementById('weightInput').value);
+
+      if (isNaN(weight) || weight <= 0) {
+          alert("Будь ласка, введіть коректну вагу (число більше 0).");
+          return;
+      }
+
+      try {
+          const response = await fetch('http://localhost:5500/api/submit', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${authToken}`
+              },
+              body: JSON.stringify({ weight })
+          });
+
+          if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || "Помилка сервера");
+          }
+
+          const userData = await response.json();
+          alert(`Дані збережено! Ваша нова вага: ${userData.user.totalWeight} кг, бали: ${userData.user.totalPoints}`);
+
+          submitModal.style.display = 'none';
+          updateLeaderboard();
+      } catch (error) {
+          alert(`Помилка: ${error.message}`);
+          console.error("Деталі помилки:", error);
+      }
+  });
+
+  async function updateLeaderboard() {
+      try {
+          const response = await fetch('http://localhost:5500/api/leaderboard');
+          const data = await response.json();
+          leaderboardTable.innerHTML = '';
+
+          data.forEach((user, index) => {
+              const row = `<tr><td>${index + 1}</td><td>${user.firstName} ${user.lastName}</td><td>${user.totalWeight}</td><td>${user.totalPoints}</td></tr>`;
+              leaderboardTable.innerHTML += row;
+          });
+      } catch (error) {
+          console.error('Помилка завантаження рейтингу:', error);
+      }
+  }
 });

@@ -116,6 +116,74 @@ app.get('/api/user', async (req, res) => {
   }
 });
 
+// Перевірка авторизації
+function verifyToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: "Токен не надано або некоректний" });
+  }
+
+  const token = authHeader.split(' ')[1];
+  
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      req.user = decoded; // Зберігаємо дані користувача
+      next();
+  } catch (error) {
+      console.error("Помилка валідації JWT:", error.message);
+      return res.status(401).json({ error: "Недійсний токен" });
+  }
+}
+
+// Використання middleware у маршрутах
+app.get('/api/user', verifyToken, async (req, res) => {
+  try {
+      const user = await User.findById(req.user._id).select('firstName lastName');
+      if (!user) {
+          return res.status(404).json({ error: "Користувача не знайдено" });
+      }
+      res.json(user);
+  } catch (error) {
+      res.status(500).json({ error: "Помилка сервера" });
+  }
+});
+
+app.post('/api/submit', verifyToken, async (req, res) => {
+  try {
+      const user = await User.findById(req.user._id);
+      if (!user) {
+          return res.status(404).json({ error: "Користувача не знайдено" });
+      }
+
+      const weight = req.body.weight;
+      if (typeof weight !== 'number' || weight <= 0) {
+          return res.status(400).json({ error: "Невірна вага" });
+      }
+
+      user.totalWeight += weight;
+      user.totalPoints += Math.round(weight * 10);
+      await user.save();
+
+      res.json({ message: "Дані оновлено", user });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
+// Отримання рейтингу
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+      const users = await User.find({})
+          .sort({ totalPoints: -1 })
+          .select('firstName lastName totalWeight totalPoints')
+          .limit(10);
+          
+      res.json(users);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
 // Запуск сервера
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => console.log(`🟢 Сервер працює на порті ${PORT}`));

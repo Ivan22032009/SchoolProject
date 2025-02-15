@@ -7,44 +7,35 @@
     <title>Про проект - EcoTrack</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html" class="logo">🌱 EcoTrack</a>
-            <div class="nav-links">
-                <a href="about.html">Про проект</a>
-                <a href="points.html">Пункти прийому</a>
-                <a href="leaderboard.html">Рейтинг</a>
-                <a href="#" class="authButton">Увійти</a>
-            </div>
-        </nav>
-    </header>
-
-    <section id="about" class="section">
-        <h2>Шкільні проекти</h2>
-        <div class="media-content">
-            <img src="img/1.jpg" alt="Екологічна свідомість" class="about-image">
-            <img src="img/2.png" alt="Переробка" class="about-image">
-            <img src="img/3.jpg" alt="Спільнота" class="about-image">
-            <img src="img/4.png" alt="Інновації" class="about-image">
-            <img src="img/5.png" alt="Чистота" class="about-image">
-            <video controls class="about-video">
-                <source src="img/1.mp4" type="video/mp4">
-                Ваш браузер не підтримує відео.
-            </video>
+    <nav>
+        <a href="index.html" class="logo">🌱 EcoTrack</a>
+        <div class="nav-links">
+            <a href="about.html">Про проект</a>
+            <a href="points.html">Пункти прийому</a>
+            <a href="#" class="authButton">Увійти</a>
         </div>
-        <div class="mission-cards">
-            <div class="mission-card">
-                <h3>🌿 Екологічна свідомість</h3>
-                <p>Формуємо культуру відповідального поводження з відходами серед жителів міста</p>
-            </div>
-            <div class="mission-card">
-                <h3>♻️ Переробка</h3>
-                <p>Спрощуємо процес сортування та здачі вторсировини через зручну мережу пунктів прийому</p>
-            </div>
-            <div class="mission-card">
-                <h3>🤝 Спільнота</h3>
-                <p>Створюємо активну спільноту екосвідомих громадян, які дбають про майбутнє свого міста</p>
-            </div>
+    </nav>
+
+    <section id="future" class="section">
+        <h2>Майбутнє без сміття</h2>
+        <div class="image-grid">
+            <img src="img/trash1.jpg" alt="Екологічне майбутнє" class="about-image">
+            <img src="img/trash2.jpg" alt="Очищене довкілля" class="about-image">
+            <img src="img/trash3.jpg" alt="Сортування відходів" class="about-image">
+            <img src="img/trash4.jpg" alt="Інноваційні рішення" class="about-image">
+            <img src="img/trash5.jpg" alt="Чистота міст" class="about-image">
+        </div>
+    </section>
+
+    <section id="flowers" class="section">
+        <h2>Квіти дарують життя</h2>
+        <div class="image-grid">
+            <img src="img/Flower1.jpg" alt="Квітуча природа" class="about-image">
+            <img src="img/Flower2.jpg" alt="Квіти та екологія" class="about-image">
+            <img src="img/Flower3.jpg" alt="Збереження природи" class="about-image">
+            <img src="img/Flower4.jpg" alt="Зелена планета" class="about-image">
+            <img src="img/Flower5.jpg" alt="Екосистема та рослини" class="about-image">
+            <img src="img/Flower6.jpg" alt="Сад майбутнього" class="about-image">
         </div>
     </section>
 
@@ -53,48 +44,6 @@
             <p>EcoTrack © 2024 | Проект екологічної ініціативи міста Умань</p>
         </div>
     </footer>
-
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-      
-          <!-- Форма входу -->
-          <form id="loginForm" class="active-form">
-            <div class="form-group">
-              <label>Email:</label>
-              <input type="email" id="loginEmail" required>
-            </div>
-            <div class="form-group">
-              <label>Пароль:</label>
-              <input type="password" id="loginPassword" required>
-            </div>
-            <button type="submit">Увійти</button>
-            <a href="#" id="switchToRegister">Зареєструватися</a>
-          </form>
-      
-          <!-- Форма реєстрації -->
-          <form id="registerForm" class="hidden-form">
-            <div class="form-group">
-              <label>Ім'я:</label>
-              <input type="text" id="registerFirstName" required>
-            </div>
-            <div class="form-group">
-              <label>Прізвище:</label>
-              <input type="text" id="registerLastName" required>
-            </div>
-            <div class="form-group">
-              <label>Email:</label>
-              <input type="email" id="registerEmail" required>
-            </div>
-            <div class="form-group">
-              <label>Пароль:</label>
-              <input type="password" id="registerPassword" required>
-            </div>
-            <button type="submit">Зареєструватися</button>
-            <a href="#" id="switchToLogin">Вже маю акаунт</a>
-          </form>
-        </div>
-      </div>
 
     <script src="script.js"></script>
 </body>

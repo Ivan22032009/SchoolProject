@@ -27,7 +27,6 @@
         <div class="tile"><a href="school-project.html">Шкільні проекти</a></div>
         <div class="tile"><a href="ps.html">Правильне сортування</a></div>
         <div class="tile"><a href="points.html">Пункти прийому</a></div>
-        <div class="tile"><a href="leaderboard.html">Рейтинг</a></div>
     </section>
 
     <section id="about" class="section">
@@ -89,10 +88,10 @@
         </div>
     </section>
 
-    <section id="cta" class="section">
+    <section id="cta" class="section join-section">
         <h2>Приєднуйтесь до нас!</h2>
         <p>Разом ми можемо зробити Умань чистішим та екологічно свідомим містом. Почніть сортувати сміття вже сьогодні!</p>
-        <a href="#" class="authButton">Увійти</a>
+        <a href="#" class="authButton join-button">Увійти</a>
     </section>
 
     <section id="leaderboard" class="section">
@@ -106,6 +105,24 @@
                     <th>Бали</th>
                 </tr>
             </thead>
+            <!-- Додати в секцію CTA або окремо -->
+<section id="submitSection" class="section" style="display: none;">
+    <button id="submitWaste" class="cta-button">Я здав сміття!</button>
+</section>
+
+<!-- Модальне вікно для введення ваги -->
+<div id="submitModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="wasteForm">
+            <div class="form-group">
+                <label>Кількість кг:</label>
+                <input type="number" id="weightInput" step="0.1" required>
+            </div>
+            <button type="submit">Надіслати</button>
+        </form>
+    </div>
+</div>
             <tbody>
                 <!-- Дані будуть додані через JavaScript -->
             </tbody>
@@ -117,7 +134,7 @@
             <p>EcoTrack © 2024 | Проект екологічної ініціативи міста Умань</p>
         </div>
     </footer>
-    
+
     <div id="loginModal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
@@ -133,7 +150,7 @@
               <input type="password" id="loginPassword" required>
             </div>
             <button type="submit">Увійти</button>
-            <a href="#" id="switchToRegister">Зареєструватися</a>
+            <a href="#" id="switchToRegister" class="switchToRegister">Зареєструватися</a>
           </form>
       
           <!-- Форма реєстрації -->
@@ -155,15 +172,10 @@
               <input type="password" id="registerPassword" required>
             </div>
             <button type="submit">Зареєструватися</button>
-            <a href="#" id="switchToLogin">Вже маю акаунт</a>
+            <a href="#" id="switchToLogin" class="switchToLogin">Вже маю акаунт</a>
           </form>
         </div>
       </div>
-
-<div id="userGreeting" style="display: none;">
-  <h2>Вітаємо, <span id="userFullName"></span>!</h2>
-</div>
-
     <script src="script.js"></script>
 </body>
 </html>
