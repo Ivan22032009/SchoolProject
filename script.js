@@ -1,66 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const loginModal = document.getElementById("loginModal");
-  const loginForm = document.getElementById("loginForm");
-  const registerForm = document.getElementById("registerForm");
-  const switchToRegister = document.getElementById("switchToRegister");
-  const switchToLogin = document.getElementById("switchToLogin");
-  const userNavElements = document.querySelectorAll(".userNav");
-  const authButtons = document.querySelectorAll(".authButton");
-  const submitSection = document.getElementById("submitSection");
-  const submitModal = document.getElementById("submitModal");
-  const submitWasteBtn = document.getElementById("submitWaste");
-  const wasteForm = document.getElementById("wasteForm");
-  const leaderboardTable = document.querySelector(".leaderboard-table tbody");
-
-  let authToken = localStorage.getItem('authToken') || null;
-
-  // Додавання обробника закриття модального вікна
-  document.querySelectorAll(".close").forEach(button => {
-      button.addEventListener("click", () => {
-          loginModal.style.display = "none";
-          submitModal.style.display = "none";
-      });
-  });
-
-   updateLeaderboard();
-  // Перевірка авторизації при завантаженні сторінки
-  if (authToken) {
-      checkAuthStatus();
-  } else {
-      updateAuthButtons(false);
-      submitSection.style.display = 'none';
-  }
-
-  async function checkAuthStatus() {
-      if (!authToken) {
-          updateAuthButtons(false);
-          return;
-      }
-
-      try {
-          const response = await fetch('http://localhost:5500/api/user', {
-              method: 'GET',
-              headers: { 'Authorization': `Bearer ${authToken}` }
-          });
-
-          if (!response.ok) {
-              throw new Error("Неавторизований користувач");
-          }
-
-          const user = await response.json();
-          userNavElements.forEach(nav => {
-              nav.textContent = `${user.firstName} ${user.lastName}`;
-              nav.style.display = 'inline-block';
-          });
-          updateAuthButtons(true);
-          submitSection.style.display = 'block';
-          updateLeaderboard();
-      } catch (error) {
-          console.error('Помилка перевірки авторизації:', error.message);
-          localStorage.removeItem('authToken');
-          updateAuthButtons(false);
-      }
-  }
+    const loginModal = document.getElementById("loginModal");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const switchToRegister = document.getElementById("switchToRegister");
+    const switchToLogin = document.getElementById("switchToLogin");
+    const userNavElements = document.querySelectorAll(".userNav");
+    const authButtons = document.querySelectorAll(".authButton");
+    const submitSection = document.getElementById("submitSection");
+    const submitModal = document.getElementById("submitModal");
+    const submitWasteBtn = document.getElementById("submitWaste");
+    const wasteForm = document.getElementById("wasteForm");
+    const leaderboardTable = document.querySelector(".leaderboard-table tbody");
+  
+    let authToken = localStorage.getItem('authToken') || null;
+  
+    // Оновлений базовий URL для Railway
+    const API_BASE_URL = 'https://schoolproject-production-74d9.up.railway.app';
+  
+    // Додавання обробника закриття модального вікна
+    document.querySelectorAll(".close").forEach(button => {
+        button.addEventListener("click", () => {
+            loginModal.style.display = "none";
+            submitModal.style.display = "none";
+        });
+    });
+  
+    updateLeaderboard();
+  
+    // Перевірка авторизації при завантаженні сторінки
+    if (authToken) {
+        checkAuthStatus();
+    } else {
+        updateAuthButtons(false);
+        submitSection.style.display = 'none';
+    }
+  
+    async function checkAuthStatus() {
+        if (!authToken) {
+            updateAuthButtons(false);
+            return;
+        }
+  
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/user`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+  
+            if (!response.ok) {
+                throw new Error("Неавторизований користувач");
+            }
+  
+            const user = await response.json();
+            userNavElements.forEach(nav => {
+                nav.textContent = `${user.firstName} ${user.lastName}`;
+                nav.style.display = 'inline-block';
+            });
+            updateAuthButtons(true);
+            submitSection.style.display = 'block';
+            updateLeaderboard();
+        } catch (error) {
+            console.error('Помилка перевірки авторизації:', error.message);
+            localStorage.removeItem('authToken');
+            updateAuthButtons(false);
+        }
+    }
 
   function updateAuthButtons(isLoggedIn) {
       authButtons.forEach(button => {
