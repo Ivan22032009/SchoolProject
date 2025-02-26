@@ -9,7 +9,7 @@ const app = express();
 
 // Налаштування CORS
 const corsOptions = {
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500'],
+  origin: ['https://ваш-сайт.com', 'https://schoolproject-production-74d9.up.railway.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -21,8 +21,6 @@ app.options('*', cors(corsOptions));
 
 // Парсинг JSON
 app.use(express.json());
-
-app.use(cors({ origin: '*' })); 
 
 // Підключення до MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecotrack')
