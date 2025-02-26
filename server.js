@@ -1,42 +1,55 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid'); // Додано для генерації ID
 
 const app = express();
 
-// Налаштування CORS
+// Налаштування CORS (замініть на ваш домен)
 const corsOptions = {
-  origin: ['https://ваш-сайт.com', 'https://schoolproject-production-74d9.up.railway.app'],
+  origin: ['https://schoolproject12.netlify.app', 'https://schoolproject-9nrp.onrender.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 };
 app.use(cors(corsOptions));
-
-// Обробка OPTIONS-запитів
-app.options('*', cors(corsOptions));
-
-// Парсинг JSON
 app.use(express.json());
 
-// Підключення до MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecotrack')
-  .then(() => console.log('✅ Підключено до MongoDB'))
-  .catch(err => console.error('❌ Помилка підключення:', err));
+// Імітація бази даних у пам'яті
+let users = [];
 
-// Схема користувача
-const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  totalWeight: { type: Number, default: 0 },
-  totalPoints: { type: Number, default: 0 }
-});
-const User = mongoose.model('User', userSchema);
+class InMemoryDB {
+  static findUserByEmail(email) {
+    return users.find(user => user.email === email);
+  }
+
+  static createUser(userData) {
+    const user = { ...userData, id: uuidv4(), totalWeight: 0, totalPoints: 0 };
+    users.push(user);
+    return user;
+  }
+
+  static updateUser(userId, updateFn) {
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) return null;
+    users[userIndex] = updateFn(users[userIndex]);
+    return users[userIndex];
+  }
+
+  static getLeaderboard() {
+    return users.slice()
+      .sort((a, b) => b.totalPoints - a.totalPoints)
+      .slice(0, 10)
+      .map(user => ({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        totalWeight: user.totalWeight,
+        totalPoints: user.totalPoints
+      }));
+  }
+}
 
 // Реєстрація
 app.post('/api/register', async (req, res) => {
@@ -47,14 +60,17 @@ app.post('/api/register', async (req, res) => {
       return res.status(400).json({ error: "Заповніть усі поля" });
     }
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    if (InMemoryDB.findUserByEmail(email)) {
       return res.status(400).json({ error: "Користувач з таким email вже існує" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ firstName, lastName, email, password: hashedPassword });
-    await user.save();
+    const user = InMemoryDB.createUser({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword
+    });
 
     res.status(201).json({ message: "Користувача створено" });
   } catch (error) {
@@ -71,7 +87,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ error: "Заповніть усі поля" });
     }
 
-    const user = await User.findOne({ email });
+    const user = InMemoryDB.findUserByEmail(email);
     if (!user) {
       return res.status(400).json({ error: "Користувача не знайдено" });
     }
@@ -81,7 +97,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ error: "Невірний пароль" });
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
     
     res.json({ 
       token, 
@@ -94,94 +110,56 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Отримання даних користувача
-app.get('/api/user', async (req, res) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: "Неавторизований запит" });
-    }
-
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-    
-    const user = await User.findById(decoded._id).select('firstName lastName');
-    if (!user) {
-      return res.status(404).json({ error: "Користувача не знайдено" });
-    }
-
-    res.json(user);
-  } catch (error) {
-    res.status(401).json({ error: "Недійсний або прострочений токен" });
-  }
-});
-
-// Перевірка авторизації
+// Middleware для перевірки токена
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: "Токен не надано або некоректний" });
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).json({ error: "Токен не надано" });
   }
 
   const token = authHeader.split(' ')[1];
-  
-  try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-      req.user = decoded; // Зберігаємо дані користувача
-      next();
-  } catch (error) {
-      console.error("Помилка валідації JWT:", error.message);
-      return res.status(401).json({ error: "Недійсний токен" });
-  }
+  jwt.verify(token, process.env.JWT_SECRET || 'secret_key', (err, decoded) => {
+    if (err) return res.status(403).json({ error: "Недійсний токен" });
+    req.userId = decoded.id;
+    next();
+  });
 }
 
-// Використання middleware у маршрутах
-app.get('/api/user', verifyToken, async (req, res) => {
-  try {
-      const user = await User.findById(req.user._id).select('firstName lastName');
-      if (!user) {
-          return res.status(404).json({ error: "Користувача не знайдено" });
-      }
-      res.json(user);
-  } catch (error) {
-      res.status(500).json({ error: "Помилка сервера" });
-  }
+// Отримання даних користувача
+app.get('/api/user', verifyToken, (req, res) => {
+  const user = users.find(u => u.id === req.userId);
+  if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
+  res.json({ firstName: user.firstName, lastName: user.lastName });
 });
 
+// Відправка даних про відходи
 app.post('/api/submit', verifyToken, async (req, res) => {
   try {
-      const user = await User.findById(req.user._id);
-      if (!user) {
-          return res.status(404).json({ error: "Користувача не знайдено" });
-      }
-
-      const weight = req.body.weight;
-      if (typeof weight !== 'number' || weight <= 0) {
-          return res.status(400).json({ error: "Невірна вага" });
-      }
-
+    const weight = parseFloat(req.body.weight);
+    if (isNaN(weight)) throw new Error("Невірна вага");
+    const updatedUser = InMemoryDB.updateUser(req.userId, (user) => {
       user.totalWeight += weight;
       user.totalPoints += Math.round(weight * 10);
-      await user.save();
+      return user;
+    });
 
-      res.json({ message: "Дані оновлено", user });
+    if (!updatedUser) throw new Error("Користувача не знайдено");
+    
+    res.json({ 
+      message: "Дані оновлено",
+      user: {
+        totalWeight: updatedUser.totalWeight,
+        totalPoints: updatedUser.totalPoints
+      }
+    });
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 });
 
-// Отримання рейтингу
-app.get('/api/leaderboard', async (req, res) => {
-  try {
-      const users = await User.find({})
-          .sort({ totalPoints: -1 })
-          .select('firstName lastName totalWeight totalPoints')
-          .limit(10);
-          
-      res.json(users);
-  } catch (error) {
-      res.status(500).json({ error: error.message });
-  }
+// Рейтинг
+app.get('/api/leaderboard', (req, res) => {
+  res.json(InMemoryDB.getLeaderboard());
 });
 
 // Запуск сервера
