@@ -192,5 +192,5 @@ app.get('/api/leaderboard', (req, res) => {
 });
 
 // Запуск сервера
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`🟢 Сервер працює на порті ${PORT}`));
