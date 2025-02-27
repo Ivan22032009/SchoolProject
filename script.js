@@ -223,19 +223,39 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Помилка: ${error.message}`);
         }
     });
-  
-    async function updateLeaderboard() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/leaderboard`); // Змінено URL
-            const data = await response.json();
-            leaderboardTable.innerHTML = '';
-  
-            data.forEach((user, index) => {
-                const row = `<tr><td>${index + 1}</td><td>${user.firstName} ${user.lastName}</td><td>${user.totalWeight}</td><td>${user.totalPoints}</td></tr>`;
-                leaderboardTable.innerHTML += row;
-            });
-        } catch (error) {
-            console.error('Помилка завантаження рейтингу:', error);
+        async function updateLeaderboard() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/leaderboard`);
+                const data = await response.json();
+                leaderboardTable.innerHTML = ''; // Очищення таблиці
+    
+                data.forEach((user, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Безпечне створення комірок
+                    ['index', 'name', 'weight', 'points'].forEach((type) => {
+                        const td = document.createElement('td');
+                        switch(type) {
+                            case 'index': 
+                                td.textContent = index + 1;
+                                break;
+                            case 'name':
+                                td.textContent = `${user.firstName} ${user.lastName}`;
+                                break;
+                            case 'weight':
+                                td.textContent = user.totalWeight;
+                                break;
+                            case 'points':
+                                td.textContent = user.totalPoints;
+                                break;
+                        }
+                        row.appendChild(td);
+                    });
+    
+                    leaderboardTable.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Помилка завантаження рейтингу:', error);
+            }
         }
-    }
-});
+    });

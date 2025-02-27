@@ -17,6 +17,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "script-src 'self' https://schoolproject-9nrp.onrender.com 'unsafe-eval';" +
+    "default-src 'self';" +
+    "style-src 'self' 'unsafe-inline';" // Дозволити inline стилі, якщо потрібно
+  );
+  next();
+});
 // Імітація бази даних у пам'яті
 let users = [];
 
