@@ -9,7 +9,7 @@ const app = express();
 
 // Налаштування CORS (замініть на ваш домен)
 const corsOptions = {
-  origin: ['https://schoolproject12.netlify.app', 'https://schoolproject-9nrp.onrender.com'],
+  origin: ['https://schoolproject12.netlify.app', 'https://ecofast.space'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
