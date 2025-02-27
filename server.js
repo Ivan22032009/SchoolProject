@@ -132,6 +132,19 @@ app.get('/api/user', verifyToken, (req, res) => {
   res.json({ firstName: user.firstName, lastName: user.lastName });
 });
 
+app.post('/api/send-verification', async (req, res) => {
+  const { email } = req.body;
+  const verificationCode = Math.floor(100000 + Math.random() * 900000); // Генеруємо 6-значний код
+
+  try {
+      await sendVerificationEmail(email, verificationCode);
+      res.json({ message: "Код відправлено!", code: verificationCode });
+  } catch (error) {
+      res.status(500).json({ error: "Не вдалося відправити код" });
+  }
+});
+
+
 // Відправка даних про відходи
 app.post('/api/submit', verifyToken, async (req, res) => {
   try {
@@ -156,6 +169,22 @@ app.post('/api/submit', verifyToken, async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+require('dotenv').config();
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+function sendVerificationEmail(toEmail, verificationCode) {
+    const msg = {
+        to: toEmail,
+        from: process.env.SENDER_EMAIL,
+        subject: 'Підтвердження електронної пошти',
+        text: `Ваш код підтвердження: ${verificationCode}`,
+        html: `<p>Ваш код підтвердження: <strong>${verificationCode}</strong></p>`,
+    };
+    return sgMail.send(msg);
+}
+
 
 // Рейтинг
 app.get('/api/leaderboard', (req, res) => {

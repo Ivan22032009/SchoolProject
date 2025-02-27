@@ -133,25 +133,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
   
+    async function sendVerificationEmail(email) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/send-verification`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await response.json();
+            if (data.code) {
+                return data.code; // Повертаємо код підтвердження
+            }
+        } catch (error) {
+            alert("Помилка відправки коду.");
+        }
+    }
+    
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const firstName = document.getElementById('registerFirstName').value;
         const lastName = document.getElementById('registerLastName').value;
         const email = document.getElementById('registerEmail').value;
         const password = document.getElementById('registerPassword').value;
-  
+    
+        // Надсилаємо код підтвердження
+        const verificationCode = await sendVerificationEmail(email);
+        const userCode = prompt("Введіть код, який ви отримали на Email:");
+    
+        if (userCode != verificationCode) {
+            alert("Невірний код підтвердження!");
+            return;
+        }
+    
         try {
-            const response = await fetch(`${API_BASE_URL}/api/register`, { // Змінено URL
+            const response = await fetch(`${API_BASE_URL}/api/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ firstName, lastName, email, password }),
             });
-  
+    
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || "Помилка реєстрації");
             }
-  
+    
             alert('Реєстрація успішна! Увійдіть.');
             registerForm.reset();
             switchToLogin.click();
@@ -159,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(error.message);
         }
     });
+    
   
     submitWasteBtn.addEventListener('click', () => {
         submitModal.style.display = 'block';
