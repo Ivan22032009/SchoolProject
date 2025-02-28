@@ -4,17 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
-const sgMail = require('@sendgrid/mail');
 
 const app = express();
 
 // ==================== Конфігурація ====================
-// Перевірка API-ключа SendGrid
-if (!process.env.SENDGRID_API_KEY?.startsWith('SG.')) {
-  console.error('❌ Невірний SendGrid API ключ! Перевірте .env файл');
-  process.exit(1);
-}
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Видалено налаштування SendGrid
 
 // Налаштування CORS
 const corsOptions = {
@@ -67,7 +61,7 @@ class InMemoryDB {
 
   static getLeaderboard() {
     return users
-      .filter(user => user.verified) // Тільки верифіковані користувачі
+      .filter(user => user.verified)
       .sort((a, b) => b.totalPoints - a.totalPoints)
       .slice(0, 10)
       .map(user => ({
@@ -95,15 +89,10 @@ app.post('/api/register', async (req, res) => {
       return res.status(400).json({ error: "Користувач вже існує" });
     }
 
-    // Відправка коду верифікації
+    // Генерація коду верифікації
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
-    await sgMail.send({
-      to: email,
-      from: process.env.SENDER_EMAIL,
-      subject: 'Код підтвердження',
-      text: `Ваш код: ${verificationCode}`,
-      html: `<strong>${verificationCode}</strong>`
-    });
+    
+    // Логіку відправки email прибрано. За потреби реалізуйте альтернативну перевірку.
 
     // Збереження користувача з хешованим паролем
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -115,7 +104,7 @@ app.post('/api/register', async (req, res) => {
       verificationCode
     });
 
-    res.json({ message: "Код відправлено на email", code: verificationCode });
+    res.json({ message: "Користувача зареєстровано", code: verificationCode });
 
   } catch (error) {
     console.error('Помилка реєстрації:', error);
