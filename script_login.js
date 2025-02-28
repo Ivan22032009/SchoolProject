@@ -10,12 +10,11 @@ loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
 });
 
-// script_login.js
 document.addEventListener('DOMContentLoaded', () => {
     const API_BASE_URL = 'https://schoolproject-1-kkzu.onrender.com';
     let authToken = localStorage.getItem('authToken');
 
-    // Обробка форми входу
+    // Обробка входу
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     
             if (!response.ok) {
-                const errorData = await response.json(); // Отримайте деталі помилки
+                const errorData = await response.json();
                 throw new Error(errorData.error || "Помилка входу");
             }
     
@@ -37,10 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('authToken', token);
             window.location.href = 'index.html';
         } catch (error) {
-            alert(error.message); // Виведіть конкретне повідомлення
+            alert(error.message);
         }
     });
 
+    // Обробка реєстрації
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const firstName = document.getElementById('registerFirstName').value;
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${API_BASE_URL}/api/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ firstName, lastName, email, password }) // Передайте всі поля
+                body: JSON.stringify({ firstName, lastName, email, password })
             });
     
             if (!response.ok) {
