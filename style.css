@@ -841,3 +841,22 @@ button {
 button:hover {
     background: #45a049;
 }
+nav {
+    padding: 1rem;
+    background: #f8f9fa;
+    margin-bottom: 2rem;
+}
+
+nav a {
+    margin-right: 1.5rem;
+    color: #333;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #4CAF50;
+}
+
+.cabinetLink {
+    display: none; /* Приховано за замовчуванням */
+}
