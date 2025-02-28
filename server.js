@@ -4,13 +4,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
+const nodemailer = require('nodemailer'); // Підключення nodemailer
 
 const app = express();
 
-// ==================== Конфігурація ====================
-// Видалено налаштування SendGrid
+// ==================== Налаштування Nodemailer ====================
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,        // наприклад, smtp.ecofast.space
+  port: process.env.SMTP_PORT,        // зазвичай 465 (SSL) або 587 (TLS)
+  secure: process.env.SMTP_PORT == 465, // true для порт 465, інакше false
+  auth: {
+    user: process.env.SMTP_USER,      // SMTP логін (наприклад, no-reply@ecofast.space)
+    pass: process.env.SMTP_PASS       // SMTP пароль
+  }
+});
 
-// Налаштування CORS
+// ==================== Налаштування CORS ====================
 const corsOptions = {
   origin: ['https://schoolproject12.netlify.app', 'https://ecofast.space'],
   methods: ['GET', 'POST'],
@@ -46,7 +55,7 @@ class InMemoryDB {
       id: uuidv4(), 
       totalWeight: 0, 
       totalPoints: 0,
-      verified: false 
+      verified: false // користувач спочатку не верифікований
     };
     users.push(user);
     return user;
@@ -92,8 +101,17 @@ app.post('/api/register', async (req, res) => {
     // Генерація коду верифікації
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
     
-    // Логіку відправки email прибрано. За потреби реалізуйте альтернативну перевірку.
+    // Надсилання email через nodemailer
+    const mailOptions = {
+      from: 'no-reply@ecofast.space',
+      to: email,
+      subject: 'Код підтвердження для EcoFast',
+      text: `Ваш код підтвердження: ${verificationCode}`,
+      html: `<p>Ваш код підтвердження: <strong>${verificationCode}</strong></p>`
+    };
 
+    await transporter.sendMail(mailOptions);
+    
     // Збереження користувача з хешованим паролем
     const hashedPassword = await bcrypt.hash(password, 10);
     InMemoryDB.createUser({
@@ -104,10 +122,41 @@ app.post('/api/register', async (req, res) => {
       verificationCode
     });
 
-    res.json({ message: "Користувача зареєстровано", code: verificationCode });
+    res.json({ message: "Користувача зареєстровано, код підтвердження надіслано на email" });
 
   } catch (error) {
     console.error('Помилка реєстрації:', error);
+    res.status(500).json({ error: "Помилка сервера" });
+  }
+});
+
+// Підтвердження email
+app.post('/api/verify', (req, res) => {
+  try {
+    const { email, code } = req.body;
+    
+    if (!email || !code) {
+      return res.status(400).json({ error: "Email та код підтвердження обов’язкові" });
+    }
+    
+    const user = InMemoryDB.findUserByEmail(email);
+    if (!user) {
+      return res.status(400).json({ error: "Користувача не знайдено" });
+    }
+    
+    if (user.verified) {
+      return res.json({ message: "Email вже верифіковано" });
+    }
+    
+    if (user.verificationCode.toString() === code.toString()) {
+      user.verified = true;
+      delete user.verificationCode;
+      return res.json({ message: "Email успішно верифіковано" });
+    } else {
+      return res.status(400).json({ error: "Невірний код підтвердження" });
+    }
+    
+  } catch (error) {
     res.status(500).json({ error: "Помилка сервера" });
   }
 });
