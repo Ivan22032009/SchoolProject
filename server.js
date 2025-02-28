@@ -22,7 +22,7 @@ app.use(cors(corsOptions));
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "script-src 'self' https://schoolproject-9nrp.onrender.com;" +
+    "script-src 'self' https://schoolproject-1-kkzu.onrender.com;" +
     "default-src 'self';" +
     "style-src 'self' 'unsafe-inline';" +
     "img-src 'self' data:;"
