@@ -129,6 +129,66 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+app.get('/api/user', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Не авторизовано" });
+
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      const user = users.find(u => u.id === decoded.id);
+      if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
+      
+      res.json({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          avatar: user.avatar
+      });
+  } catch (error) {
+      res.status(401).json({ error: "Недійсний токен" });
+  }
+});
+
+// Оновлення профілю
+app.put('/api/update-profile', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Не авторизовано" });
+
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      const { firstName, lastName } = req.body;
+
+      const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
+          ...user,
+          firstName,
+          lastName
+      }));
+
+      res.json(updatedUser);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
+
+// Зміна паролю
+app.put('/api/change-password', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Не авторизовано" });
+
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      const { newPassword } = req.body;
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
+          ...user,
+          password: hashedPassword
+      }));
+
+      res.json({ message: "Пароль оновлено" });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
 // Інші роути (submit, leaderboard, verifyToken) залишаються без змін
 // ... (див. оригінальний код, видаливши лише частини з верифікацією)
 
