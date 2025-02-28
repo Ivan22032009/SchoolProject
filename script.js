@@ -1,10 +1,10 @@
 // script.js
 document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE_URL = 'https://schoolproject-1-kkzu.onrender.com'; // Додано
     const authToken = localStorage.getItem('authToken');
     
-    // Перевірка авторизації при завантаженні
     if (authToken) {
-        fetch(`${API_BASE_URL}/api/user`, {
+        fetch(`${API_BASE_URL}/api/user`, { // Використовуємо змінну
             headers: { 'Authorization': `Bearer ${authToken}` }
         }).then(response => {
             if (response.ok) {
@@ -15,9 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Обробка виходу
-    document.querySelector('.authButton').addEventListener('click', () => {
-        localStorage.removeItem('authToken');
-        window.location.reload();
-    });
+    const authButton = document.querySelector('.authButton');
+    if (authButton) { // Додаємо перевірку на наявність елемента
+        authButton.addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.reload();
+        });
+    }
 });
