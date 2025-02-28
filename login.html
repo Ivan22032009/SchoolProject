@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>EcoFast - Екологічна ініціатива Умані</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css'>
+    <link rel='stylesheet' href='style_login.css'>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-in">
+            <form id="loginForm">
+                <h1>Увійти</h1>
+                <div class="social-icons">
+                    <!-- Соціальні іконки -->
+                </div>
+                <span>або використовуйте свій email та пароль</span>
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
+                <a href="#">Забули пароль?</a>
+                <button type="submit">Увійти</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-up">
+            <form id="registerForm">
+                <h1>Реєстрація</h1>
+                <div class="social-icons">
+                    <!-- Соціальні іконки -->
+                </div>
+                <span>або використовуйте свій email для реєстрації</span>
+                <input type="text" id="registerFirstName" placeholder="Ім'я" required>
+                <input type="text" id="registerLastName" placeholder="Прізвище" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Пароль" required>
+                <button type="submit">Зареєструватися</button>
+            </form>
+        </div>
+
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>З Поверненням!</h1>
+                    <p>Введіть ваші персональні дані щоб використовувати усі можливості сайту</p>
+                    <button class="hidden" id="login">Увійти</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Привіт, Друже!</h1>
+                    <p>Зареєструйте ваші персональні дані щоб використовувати усі можливості сайту</p>
+                    <button class="hidden" id="register">Зареєструватися</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='script_login.js'></script>
+</body>
+</html>
