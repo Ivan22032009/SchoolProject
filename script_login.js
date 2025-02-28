@@ -12,7 +12,7 @@ loginBtn.addEventListener('click', () => {
 
 // script_login.js
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE_URL = 'https://schoolproject-9nrp.onrender.com';
+    const API_BASE_URL = 'https://schoolproject-1-kkzu.onrender.com';
     let authToken = localStorage.getItem('authToken');
 
     // Обробка форми входу
