@@ -189,9 +189,66 @@ app.put('/api/change-password', async (req, res) => {
       res.status(400).json({ error: error.message });
   }
 });
-// Інші роути (submit, leaderboard, verifyToken) залишаються без змін
-// ... (див. оригінальний код, видаливши лише частини з верифікацією)
+app.put('/api/change-password', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Не авторизовано" });
 
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      const { oldPassword, newPassword } = req.body;
+      
+      const user = users.find(u => u.id === decoded.id);
+      const validPassword = await bcrypt.compare(oldPassword, user.password);
+      if (!validPassword) return res.status(400).json({ error: "Невірний старий пароль" });
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+
+      res.json({ message: "Пароль успішно змінено" });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
+app.post('/api/update-avatar', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Не авторизовано" });
+
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      const user = users.find(u => u.id === decoded.id);
+      if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
+
+      // Тут має бути логіка завантаження файлу на сервер
+      // Припустимо, що ми отримуємо URL аватара
+      user.avatar = req.body.avatarUrl;
+      res.json({ message: "Аватар оновлено" });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
+
+// Оновлення профілю
+app.put('/api/update-profile', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: "Не авторизовано" });
+
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+      const { bio, birthday, country, phone } = req.body;
+
+      const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
+          ...user,
+          bio,
+          birthday,
+          country,
+          phone
+      }));
+
+      res.json(updatedUser);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
 // Запуск сервера
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`🟢 Сервер працює на порті ${PORT}`));
