@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">E-mail</label>
-                                    <input type="text" class="form-control mb-1" value="nmaxwell@mail.com">
+                                    <input type="email" class="form-control mb-1" id="userEmail">
                                     <div class="alert alert-warning mt-3">
                                         Your email is not confirmed. Please check your inbox.<br>
                                         <a href="javascript:void(0)">Resend confirmation</a>
@@ -293,8 +293,37 @@
                 location.reload();
             });
         
-            // Інші обробники...
+// Додати в script секцію cabinet.html
+document.querySelector('#userEmail').value = user.email;
+document.querySelector('.btn-primary').addEventListener('click', async () => {
+    const userData = {
+        firstName: document.querySelector('input[value="Nelle Maxwell"]').value,
+        lastName: document.querySelector('input[value="nmaxwell"]').value,
+        bio: document.querySelector('#account-info textarea').value,
+        birthday: document.querySelector('#account-info input[type="text"]').value,
+        country: document.querySelector('#account-info select').value,
+        phone: document.querySelector('#account-info input[type="text"]').value
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/update-profile`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify(userData)
         });
+        
+        if(response.ok) {
+            alert('Дані оновлено!');
+            location.reload();
+        }
+    } catch (error) {
+        alert('Помилка оновлення: ' + error.message);
+    }
+        });
+});
         </script>
 </body>
 

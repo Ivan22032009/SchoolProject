@@ -227,6 +227,23 @@ app.post('/api/update-avatar', (req, res) => {
   }
 });
 
+app.post('/api/submit-waste', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  const { weight } = req.body;
+  
+  const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+  const user = users.find(u => u.id === decoded.id);
+  
+  user.totalWeight += parseFloat(weight);
+  user.totalPoints += Math.floor(weight * 10); // 10 балів за кг
+  
+  res.json({ success: true });
+});
+
+app.get('/api/leaderboard', (req, res) => {
+  res.json(InMemoryDB.getLeaderboard());
+});
+
 // Оновлення профілю
 app.put('/api/update-profile', (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -234,17 +251,19 @@ app.put('/api/update-profile', (req, res) => {
 
   try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-      const { bio, birthday, country, phone } = req.body;
-
-      const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
-          ...user,
-          bio,
-          birthday,
-          country,
-          phone
-      }));
-
-      res.json(updatedUser);
+      const { firstName, lastName, bio, birthday, country, phone } = req.body;
+    
+    const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
+        ...user,
+        firstName,
+        lastName,
+        bio,
+        birthday,
+        country,
+        phone
+    }));
+    
+    res.json(updatedUser);
   } catch (error) {
       res.status(400).json({ error: error.message });
   }
