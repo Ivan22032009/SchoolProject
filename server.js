@@ -44,7 +44,7 @@ class InMemoryDB {
       id: uuidv4(), 
       totalWeight: 0, 
       totalPoints: 0,
-      verified: true // Користувач завжди верифікований
+      verified: false // Користувач завжди верифікований
     };
     users.push(user);
     return user;
@@ -72,34 +72,78 @@ class InMemoryDB {
 
 // ==================== Роути ====================
 
-// Реєстрація
+// Функція надсилання email
+async function sendVerificationEmail(email, token) {
+  const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+      }
+  });
+
+  const url = `http://localhost:3000/verify-email?token=${token}`;
+
+  await transporter.sendMail({
+      from: `"EcoFast" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Підтвердження реєстрації",
+      html: `<h3>Перейдіть за посиланням для підтвердження email:</h3><a href="${url}">${url}</a>`
+  });
+}
+
+
 app.post('/api/register', async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
-    
-    // Валідація
-    if (!firstName || !lastName || !email || !password) {
-      return res.status(400).json({ error: "Заповніть усі поля" });
-    }
+      const { firstName, lastName, email, password } = req.body;
 
-    if (InMemoryDB.findUserByEmail(email)) {
-      return res.status(400).json({ error: "Користувач вже існує" });
-    }
+      if (!firstName || !lastName || !email || !password) {
+          return res.status(400).json({ error: "Заповніть усі поля" });
+      }
 
-    // Збереження користувача
-    const hashedPassword = await bcrypt.hash(password, 10);
-    InMemoryDB.createUser({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword
-    });
+      if (InMemoryDB.findUserByEmail(email)) {
+          return res.status(400).json({ error: "Користувач вже існує" });
+      }
 
-    res.json({ message: "Користувача зареєстровано" });
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = InMemoryDB.createUser({
+          firstName,
+          lastName,
+          email,
+          password: hashedPassword,
+          verified: false
+      });
+
+      // Генерація токену для підтвердження
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
+
+      // Надсилаємо листа для підтвердження
+      await sendVerificationEmail(email, token);
+
+      res.json({ message: "Реєстрація успішна! Перевірте email для підтвердження." });
 
   } catch (error) {
-    console.error('Помилка реєстрації:', error);
-    res.status(500).json({ error: "Помилка сервера" });
+      console.error('Помилка реєстрації:', error);
+      res.status(500).json({ error: "Помилка сервера" });
+  }
+});
+
+
+const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
+await sendVerificationEmail(email, token);
+
+app.get('/api/verify-email', async (req, res) => {
+  try {
+      const { token } = req.query;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+
+      const user = users.find(u => u.id === decoded.id);
+      if (!user) return res.status(400).json({ error: "Невірний токен" });
+
+      user.verified = true;
+      res.json({ message: "Email підтверджено! Тепер можете увійти." });
+  } catch (error) {
+      res.status(400).json({ error: "Невірний або прострочений токен" });
   }
 });
 
@@ -107,6 +151,8 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!user.verified) return res.status(400).json({ error: "Email не підтверджено. Перевірте пошту." });
     
     const user = InMemoryDB.findUserByEmail(email);
     if (!user) return res.status(400).json({ error: "Користувача не знайдено" });
@@ -116,6 +162,7 @@ app.post('/api/login', async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { 
       expiresIn: '1h' 
+      
     });
 
     res.json({ 

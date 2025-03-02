@@ -60,10 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errorData.error || "Помилка реєстрації");
             }
     
-            alert('Реєстрація успішна!');
-            window.location.href = 'index.html';
+            alert('Реєстрація успішна! Перевірте email для підтвердження.');
         } catch (error) {
             alert(error.message);
         }
     });
+    
 });
