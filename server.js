@@ -11,7 +11,7 @@ const app = express();
 // ==================== Налаштування CORS ====================
 const corsOptions = {
   origin: ['https://schoolproject12.netlify.app', 'https://ecofast.space'],
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT'], // Now includes PUT
   allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
