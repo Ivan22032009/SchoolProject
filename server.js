@@ -141,6 +141,7 @@ app.get('/api/user', (req, res) => {
       res.json({
           firstName: user.firstName,
           lastName: user.lastName,
+          email: user.email,
           avatar: user.avatar
       });
   } catch (error) {
@@ -257,6 +258,7 @@ app.put('/api/update-profile', (req, res) => {
         ...user,
         firstName,
         lastName,
+        email, 
         bio,
         birthday,
         country,
