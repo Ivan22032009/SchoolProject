@@ -272,7 +272,7 @@
             // Заповнення полів
             document.querySelector('input[type="text"][value="nmaxwell"]').value = user.lastName;
             document.querySelector('input[type="text"][value="Nelle Maxwell"]').value = user.firstName;
-            document.querySelector('input[type="text"][value="nmaxwell@mail.com"]').value = user.email;
+            document.querySelector('#userEmail').value = user.email;
             
             // Оновлення аватара
             if(user.avatar) {
@@ -299,7 +299,6 @@ document.querySelector('.btn-primary').addEventListener('click', async () => {
     const userData = {
         firstName: document.querySelector('input[value="Nelle Maxwell"]').value,
         lastName: document.querySelector('input[value="nmaxwell"]').value,
-        email: document.querySelector('#userEmail').value,
         bio: document.querySelector('#account-info textarea').value,
         birthday: document.querySelector('#account-info input[type="text"]').value,
         country: document.querySelector('#account-info select').value,
