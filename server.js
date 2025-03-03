@@ -44,7 +44,7 @@ class InMemoryDB {
       id: uuidv4(), 
       totalWeight: 0, 
       totalPoints: 0,
-      verified: false // Користувач завжди верифікований
+      verified: true // Користувач завжди верифікований
     };
     users.push(user);
     return user;
