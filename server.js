@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -13,7 +11,7 @@ const app = express();
 const corsOptions = {
   origin: ['https://schoolproject12.netlify.app', 'https://ecofast.space'],
   methods: ['GET', 'POST', 'PUT'], // Now includes PUT
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Ty e', 'Authorization']
 };
 app.use(cors(corsOptions));
 
