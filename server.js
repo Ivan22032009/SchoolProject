@@ -128,10 +128,6 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-
-const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
-await sendVerificationEmail(email, token);
-
 app.get('/api/verify-email', async (req, res) => {
   try {
       const { token } = req.query;
@@ -190,27 +186,6 @@ app.get('/api/user', (req, res) => {
       });
   } catch (error) {
       res.status(401).json({ error: "Недійсний токен" });
-  }
-});
-
-// Оновлення профілю
-app.put('/api/update-profile', (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: "Не авторизовано" });
-
-  try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-      const { firstName, lastName } = req.body;
-
-      const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
-          ...user,
-          firstName,
-          lastName
-      }));
-
-      res.json(updatedUser);
-  } catch (error) {
-      res.status(400).json({ error: error.message });
   }
 });
 
@@ -277,7 +252,7 @@ app.put('/api/update-profile', (req, res) => {
 
   try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-      const { firstName, lastName, bio, birthday, country, phone } = req.body;
+      const { firstName, lastName, email, bio, birthday, country, phone } = req.body;
     
     const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
         ...user,
