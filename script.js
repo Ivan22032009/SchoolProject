@@ -75,6 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
+    // Завантажити лідерборд одразу
+    loadLeaderboard();
+
     // Обробник кнопки "Я здав сміття"
     const submitWasteBtn = document.getElementById('submitWaste');
     const submitModal = document.getElementById('submitModal');
