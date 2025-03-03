@@ -843,7 +843,6 @@ button:hover {
 }
 nav {
     padding: 1rem;
-    background: #f8f9fa;
     margin-bottom: 2rem;
 }
 
@@ -860,3 +859,20 @@ nav a:hover {
 .cabinetLink {
     display: none; /* Приховано за замовчуванням */
 }
+body {
+    opacity: 0;
+    animation: fadeInPage 1.5s forwards;
+  }
+  
+  @keyframes fadeInPage {
+    to {
+      opacity: 1;
+    }
+  }  
+  /* Секція, що має з'явитися */
+  .section.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  

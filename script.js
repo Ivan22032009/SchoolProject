@@ -7,6 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitSection = document.getElementById('submitSection');
     const leaderboardTable = document.querySelector('.leaderboard-table tbody');
 
+    document.getElementById('aboutHeader').addEventListener('click', function() {
+        document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      document.getElementById('how-it-works').addEventListener('click', function() {
+        document.getElementById('works').scrollIntoView({ behavior: 'smooth' });
+      });
+      document.getElementById('benefits').addEventListener('click', function() {
+        document.getElementById('fits').scrollIntoView({ behavior: 'smooth' });
+      });
+      document.getElementById('cta').addEventListener('click', function() {
+        document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
+      });
+      
     // Функція для оновлення навігації
     const updateNavigation = (user) => {
         if (cabinetLink) cabinetLink.style.display = 'inline-block';
