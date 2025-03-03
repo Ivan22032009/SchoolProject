@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -11,7 +12,7 @@ const app = express();
 const corsOptions = {
   origin: ['https://schoolproject12.netlify.app', 'https://ecofast.space'],
   methods: ['GET', 'POST', 'PUT'], // Now includes PUT
-  allowedHeaders: ['Content-Ty e', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
 
@@ -150,18 +151,16 @@ app.get('/api/verify-email', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!user.verified) return res.status(400).json({ error: "Email не підтверджено. Перевірте пошту." });
-    
     const user = InMemoryDB.findUserByEmail(email);
+    
     if (!user) return res.status(400).json({ error: "Користувача не знайдено" });
+    if (!user.verified) return res.status(400).json({ error: "Email не підтверджено. Перевірте пошту." });
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return res.status(400).json({ error: "Невірний пароль" });
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { 
       expiresIn: '1h' 
-      
     });
 
     res.json({ 
@@ -169,7 +168,6 @@ app.post('/api/login', async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName
     });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -217,25 +215,6 @@ app.put('/api/update-profile', (req, res) => {
 });
 
 // Зміна паролю
-app.put('/api/change-password', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: "Не авторизовано" });
-
-  try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-      const { newPassword } = req.body;
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-      const updatedUser = InMemoryDB.updateUser(decoded.id, (user) => ({
-          ...user,
-          password: hashedPassword
-      }));
-
-      res.json({ message: "Пароль оновлено" });
-  } catch (error) {
-      res.status(400).json({ error: error.message });
-  }
-});
 app.put('/api/change-password', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: "Не авторизовано" });
