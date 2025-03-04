@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   birthday: Date,
   country: String,
   phone: String,
+  
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

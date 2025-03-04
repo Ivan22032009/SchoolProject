@@ -21,6 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
       });
       
+      async function sendVerificationEmail(email, token) {
+        const verificationUrl = `https://ecofast.space/verify.html?token=${token}`;
+        
+        await transporter.sendMail({
+          html: `Клікніть для підтвердження: <a href="${verificationUrl}">${verificationUrl}</a>`
+        });
+      }
+
     // Функція для оновлення навігації
     const updateNavigation = (user) => {
         if (cabinetLink) cabinetLink.style.display = 'inline-block';
