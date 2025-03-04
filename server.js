@@ -284,9 +284,6 @@ app.get('/api/leaderboard', async (req, res) => {
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`🟢 Сервер працює на порті ${PORT}`));
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('🟢 Підключено до MongoDB'))
-.catch(err => console.error('🔴 Помилка підключення:', err));
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://isenkoivan93:Ivan0680790898@ecofast.sdomwkf.mongodb.net/ecofast?retryWrites=true&w=majority')
+  .then(() => console.log('🟢 Підключено до MongoDB'))
+  .catch(err => console.error('🔴 Помилка підключення:', err));
