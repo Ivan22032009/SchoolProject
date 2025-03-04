@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const nodemailer = require('nodemailer');
-
 const app = express();
 
 // ==================== Налаштування CORS ====================
@@ -72,6 +71,7 @@ class InMemoryDB {
 }
 
 // ==================== Модель користувача ====================
+const User = mongoose.model('User', userSchema);
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -112,8 +112,6 @@ async function sendVerificationEmail(email, token) {
 }
 
 // Реєстрація
-
-const User = require('./models/User');
 
 app.post('/api/register', async (req, res) => {
   try {
