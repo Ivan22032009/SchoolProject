@@ -1,4 +1,5 @@
 require('dotenv').config();
+const mongoose = require('mongoose');
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -70,6 +71,24 @@ class InMemoryDB {
   }
 }
 
+// ==================== Модель користувача ====================
+const userSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  totalWeight: { type: Number, default: 0 },
+  totalPoints: { type: Number, default: 0 },
+  avatar: { type: String, default: '' },
+  verified: { type: Boolean, default: false },
+  bio: String,
+  birthday: Date,
+  country: String,
+  phone: String,
+}, { timestamps: true });
+
+module.exports = mongoose.model('User', userSchema);
+
 // ==================== Роути ====================
 
 // Функція надсилання email
@@ -92,27 +111,32 @@ async function sendVerificationEmail(email, token) {
   });
 }
 
+// Реєстрація
+
+const User = require('./models/User');
 
 app.post('/api/register', async (req, res) => {
   try {
-      const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
-      if (!firstName || !lastName || !email || !password) {
-          return res.status(400).json({ error: "Заповніть усі поля" });
-      }
+    // Перевірка наявності користувача
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Користувач вже існує" });
+    }
 
-      if (InMemoryDB.findUserByEmail(email)) {
-          return res.status(400).json({ error: "Користувач вже існує" });
-      }
+    // Хешування паролю
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = InMemoryDB.createUser({
-          firstName,
-          lastName,
-          email,
-          password: hashedPassword,
-          verified: false
-      });
+    // Створення користувача
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    });
+
+    await user.save();
 
       // Генерація токену для підтвердження
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
@@ -147,45 +171,38 @@ app.get('/api/verify-email', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = InMemoryDB.findUserByEmail(email);
-    
+    const user = await User.findOne({ email });
+
     if (!user) return res.status(400).json({ error: "Користувача не знайдено" });
-    if (!user.verified) return res.status(400).json({ error: "Email не підтверджено. Перевірте пошту." });
+    if (!user.verified) return res.status(400).json({ error: "Email не підтверджено" });
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return res.status(400).json({ error: "Невірний пароль" });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret_key', { 
-      expiresIn: '1h' 
-    });
-
-    res.json({ 
-      token,
-      firstName: user.firstName,
-      lastName: user.lastName
-    });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token, firstName: user.firstName, lastName: user.lastName });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-app.get('/api/user', (req, res) => {
+app.get('/api/user', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: "Не авторизовано" });
 
   try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-      const user = users.find(u => u.id === decoded.id);
-      if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
-      
-      res.json({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          avatar: user.avatar
-      });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
+
+    res.json({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      avatar: user.avatar,
+    });
   } catch (error) {
-      res.status(401).json({ error: "Недійсний токен" });
+    res.status(401).json({ error: "Недійсний токен" });
   }
 });
 
@@ -228,21 +245,21 @@ app.post('/api/update-avatar', (req, res) => {
   }
 });
 
-app.post('/api/submit-waste', (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  const { weight } = req.body;
-  
-  const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
-  const user = users.find(u => u.id === decoded.id);
-  
-  user.totalWeight += parseFloat(weight);
-  user.totalPoints += Math.floor(weight * 10); // 10 балів за кг
-  
-  res.json({ success: true });
-});
+app.post('/api/submit-waste', async (req, res) => {
+  try {
+    const { weight } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-app.get('/api/leaderboard', (req, res) => {
-  res.json(InMemoryDB.getLeaderboard());
+    const user = await User.findById(decoded.id);
+    user.totalWeight += parseFloat(weight);
+    user.totalPoints += Math.floor(weight * 10);
+    await user.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
 // Оновлення профілю
@@ -270,6 +287,26 @@ app.put('/api/update-profile', (req, res) => {
       res.status(400).json({ error: error.message });
   }
 });
+
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    const leaders = await User.find()
+      .sort({ totalPoints: -1 })
+      .limit(10)
+      .select('firstName lastName totalWeight totalPoints');
+
+    res.json(leaders);
+  } catch (error) {
+    res.status(500).json({ error: "Помилка сервера" });
+  }
+});
 // Запуск сервера
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`🟢 Сервер працює на порті ${PORT}`));
+
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('🟢 Підключено до MongoDB'))
+.catch(err => console.error('🔴 Помилка підключення:', err));
