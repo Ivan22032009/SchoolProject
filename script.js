@@ -15,15 +15,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.getElementById('how-it-works').addEventListener('click', function() {
-        document.getElementById('works').scrollIntoView({ behavior: 'smooth' });
-    });
-    document.getElementById('benefits').addEventListener('click', function() {
-        document.getElementById('fits').scrollIntoView({ behavior: 'smooth' });
-    });
-    document.getElementById('cta').addEventListener('click', function() {
-        document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
-    });
+    const howItWorksBtn = document.getElementById('how-it-works');
+    if (howItWorksBtn) {
+        howItWorksBtn.addEventListener('click', function() {
+            document.getElementById('works').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+    
+    const benefits = document.getElementById('benefits');
+    if (benefits) {
+        benefits.addEventListener('click', function() {
+            document.getElementById('fits').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+    
+    const cta = document.getElementById('cta');
+    if (cta) {
+        cta.addEventListener('click', function() {
+            document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
       
     // Видалено функцію sendVerificationEmail, оскільки верифікація email більше не використовується
 
