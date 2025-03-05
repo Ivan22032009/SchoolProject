@@ -30,30 +30,8 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// ==================== Роути ====================
-
-// Функція відправки верифікаційного листа
-async function sendVerificationEmail(email, token) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
-  });
-
-  const verificationUrl = `https://ecofast.space/verify.html?token=${token}`;
-
-  await transporter.sendMail({
-    from: `"EcoFast" <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: "Підтвердження реєстрації",
-    html: `
-      <h3>Перейдіть за посиланням для підтвердження email:</h3>
-      <a href="${verificationUrl}">${verificationUrl}</a>
-    `
-  });
-}
+// Видалено функцію sendVerificationEmail та маршрут для верифікації email,
+// оскільки верифікація email більше не використовується
 
 // Реєстрація
 app.post('/api/register', async (req, res) => {
@@ -68,48 +46,22 @@ app.post('/api/register', async (req, res) => {
 
     // Хешування паролю
     const hashedPassword = await bcrypt.hash(password, 10);
-    const verificationToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Створення користувача
+    // Створення користувача без верифікації
     const user = new User({
       firstName,
       lastName,
       email,
       password: hashedPassword,
-      verificationToken,
-      verified: false
+      verified: true // Автоматична верифікація
     });
 
     await user.save();
-    await sendVerificationEmail(email, verificationToken);
-
-    res.json({ message: "Реєстрація успішна! Перевірте email для підтвердження." });
+    res.json({ message: "Реєстрація успішна!" });
 
   } catch (error) {
     console.error('Помилка реєстрації:', error);
     res.status(500).json({ error: "Помилка сервера" });
-  }
-});
-
-// Верифікація email
-app.get('/api/verify-email', async (req, res) => {
-  try {
-    const { token } = req.query;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ email: decoded.email });
-
-    if (!user) {
-      return res.status(400).send('Невірний токен');
-    }
-
-    user.verified = true;
-    user.verificationToken = undefined;
-    await user.save();
-
-    res.send('Email успішно підтверджено! Тепер можете увійти.');
-
-  } catch (error) {
-    res.status(400).send('Невірний або прострочений токен');
   }
 });
 
@@ -123,10 +75,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ error: "Користувача не знайдено" });
     }
 
-    if (!user.verified) {
-      return res.status(401).json({ error: "Email не верифіковано" });
-    }
-
+    // Видалено перевірку верифікації email
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(400).json({ error: "Невірний пароль" });

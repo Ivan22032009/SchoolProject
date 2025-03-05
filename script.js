@@ -9,25 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('aboutHeader').addEventListener('click', function() {
         document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-      });
+    });
 
-      document.getElementById('how-it-works').addEventListener('click', function() {
+    document.getElementById('how-it-works').addEventListener('click', function() {
         document.getElementById('works').scrollIntoView({ behavior: 'smooth' });
-      });
-      document.getElementById('benefits').addEventListener('click', function() {
+    });
+    document.getElementById('benefits').addEventListener('click', function() {
         document.getElementById('fits').scrollIntoView({ behavior: 'smooth' });
-      });
-      document.getElementById('cta').addEventListener('click', function() {
+    });
+    document.getElementById('cta').addEventListener('click', function() {
         document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
-      });
+    });
       
-      async function sendVerificationEmail(email, token) {
-        const verificationUrl = `https://ecofast.space/verify.html?token=${token}`;
-        
-        await transporter.sendMail({
-          html: `Клікніть для підтвердження: <a href="${verificationUrl}">${verificationUrl}</a>`
-        });
-      }
+    // Видалено функцію sendVerificationEmail, оскільки верифікація email більше не використовується
 
     // Функція для оновлення навігації
     const updateNavigation = (user) => {

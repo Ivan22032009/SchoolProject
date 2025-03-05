@@ -60,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errorData.error || "Помилка реєстрації");
             }
     
-            alert('Реєстрація успішна! Перевірте email для підтвердження.');
+            // Повідомлення без згадки про перевірку email
+            alert('Реєстрація успішна!');
         } catch (error) {
             alert(error.message);
         }
