@@ -7,9 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitSection = document.getElementById('submitSection');
     const leaderboardTable = document.querySelector('.leaderboard-table tbody');
 
-    document.getElementById('aboutHeader').addEventListener('click', function() {
-        document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-    });
+    const aboutHeader = document.getElementById('aboutHeader');
+    if (aboutHeader) {
+        aboutHeader.addEventListener('click', () => {
+            const aboutSection = document.getElementById('about');
+            aboutSection?.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
 
     document.getElementById('how-it-works').addEventListener('click', function() {
         document.getElementById('works').scrollIntoView({ behavior: 'smooth' });
