@@ -7,6 +7,61 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitSection = document.getElementById('submitSection');
     const leaderboardTable = document.querySelector('.leaderboard-table tbody');
 
+    function initSliders() {
+        // Для десктопу - колаж
+        if (window.innerWidth > 1320) {
+            const cards = document.querySelectorAll('.desktop-collage .card');
+            cards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    // Логіка активації картки
+                    document.getElementById(`c${index + 1}`).checked = true;
+                });
+            });
+        }
+    
+        // Для мобільних - слайдер
+        else {
+            const slides = Array.from(document.querySelectorAll('.mobile-slider .item')); // Фікс тут
+            const dotsContainer = document.querySelector('.mobile-slider .dots');
+            let currentSlide = 0;
+    
+            // Обмеження кількості точок до 3
+            const maxDots = 1;
+            slides.slice(0, maxDots).forEach((_, i) => {
+                const dot = document.createElement('li');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            });
+    
+            // Навігація
+            document.getElementById('next').addEventListener('click', () => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                goToSlide(currentSlide);
+            });
+    
+            document.getElementById('prev').addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                goToSlide(currentSlide);
+            });
+    
+            function goToSlide(index) {
+                currentSlide = index;
+                const offset = -slides[index].offsetLeft;
+                document.querySelector('.mobile-slider .list').style.transform = `translateX(${offset}px)`;
+                
+                // Оновлення точок
+                document.querySelectorAll('.mobile-slider .dots li').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+        }
+    }
+    
+    // Ініціалізація при завантаженні та зміні розміру
+    window.addEventListener('load', initSliders);
+    window.addEventListener('resize', initSliders);
+
     const aboutHeader = document.getElementById('aboutHeader');
     if (aboutHeader) {
         aboutHeader.addEventListener('click', () => {
