@@ -1,0 +1,268 @@
+/* base.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f2f8f2;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+  }
+  /* Загальні стилі для навігації */
+  nav {
+    margin-bottom: 0; 
+    background-color: #ffffff;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    margin-bottom: 0
+  }
+  .logo img {
+    width: 210px;
+    height: auto;
+  }
+
+  .logo {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  background-color: #2b972f;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.nav-links .userNav {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.nav-links a:hover {
+  background-color: #1f5f32; /* Ще темніший відтінок зеленого */
+  color: white;
+}
+
+nav a {
+  margin-right: 1.5rem;
+  color: #333;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #4CAF50;
+}
+.cabinetLink {
+  display: none; /* Приховано за замовчуванням */
+}
+
+  .authButton {
+    background-color: #3da657;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .authButton:hover {
+    background-color: #2d8442;
+  }
+  /* Футер */
+  footer {
+    background-color: #2d8442;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  /* Базові сітки і секції */
+  .section {
+    max-width: 1175px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.section h2 {
+    color: #2d8442;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+}
+
+.section h2:after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #3da657;
+    margin: 10px auto;
+}
+  /* Інші загальні стилі (наприклад, для сіток, загальних кнопок, форм) */
+  .menu-container {
+    background-color: #66cccc; /* Можна змінити на потрібний відтінок */
+    padding: 10px 0;
+}
+.menu-bg {
+  /* Наприклад, якщо треба тінь або додаткова стилізація */
+  /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
+}
+/* Обгортка основного меню */
+.menu-primary-menu-container {
+  max-width: 1200px; /* Задайте потрібну ширину контейнера */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+/* Скидаємо відступи списків, робимо меню горизонтальним */
+.menu-primary-menu-container ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex; 
+  align-items: center;
+  justify-content: center; /* або center / space-around, залежно від бажаного розташування */
+  gap: 30px; /* Відстань між пунктами меню */
+}
+/* Кожен пункт меню */
+.menu-primary-menu-container li {
+  position: relative; /* Потрібно для абсолютного позиціонування підменю */
+}
+/* Посилання у меню */
+.menu-primary-menu-container li a {
+  color: #fff; /* Білий текст */
+  font-weight: 600;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+/* Ефект при наведенні на пункт меню */
+.menu-primary-menu-container li a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Підменю (список) за замовчуванням приховане */
+.menu-primary-menu-container .sub-menu {
+  display: none;
+  position: absolute; 
+  top: 100%; /* Нижче основного пункту */
+  left: 0;
+  background-color: #66cccc; /* Тло підменю (той же колір або інший) */
+  min-width: 300px; /* Мінімальна ширина підменю */
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  z-index: 9999; /* Щоб перекривати інші елементи */
+}
+
+/* Відображати підменю при наведенні на батьківський пункт */
+.menu-primary-menu-container li:hover > .sub-menu {
+  display: block;
+}
+
+/* Стилі для пунктів у підменю */
+.menu-primary-menu-container .sub-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: #fff; /* Білий текст */
+  border-radius: 0;
+}
+
+/* Ефект при наведенні на пункт підменю */
+.menu-primary-menu-container .sub-menu li a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Приклад стилю для span.arrow, якщо потрібно якось виділити стрілку або текст */
+.menu-primary-menu-container .arrow {
+  /* Наприклад, щоб додати відступ чи іконку стрілочки */
+  /* padding-right: 5px; */
+  /* position: relative; */
+}
+.menu-container {
+  margin-top: 0;  /* Скиньте до нуля */
+  /* або, якщо треба, padding-top: 0; */
+}
+
+#profileSection {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+#logoutBtn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#logoutBtn:hover {
+  background-color: #c0392b;
+}
+#userNav {
+  display: none; /* Початково прихований */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background-color: #2d8442; /* Колір фону, як у кнопок навігації */
+  cursor: default; /* Вимкнути курсор, щоб не виглядало як посилання */
+}
+.mission-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+}
+
+.mission-card h3 {
+  color: #2d8442;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mission-card{
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-top: 2rem;
+  padding: 1.5rem;
+}
