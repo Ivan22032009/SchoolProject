@@ -122,7 +122,7 @@ nav {
 
 .section-benefits {
     position: relative; /* Щоб фон працював коректно */
-    background: url("img/wave.png") no-repeat center bottom; 
+    background: url("img/wave.webp") no-repeat center bottom; 
     /* Можна змінити на top, якщо хочете, щоб хвиля була зверху */
     background-size: contain; 
     /* або cover / auto – залежно від бажаного вигляду */
@@ -904,28 +904,28 @@ input:checked + label .description {
 }
 
 .card[for="c1"] {
-    background-image: url('img/colage.jpg');
+    background-image: url('img/colage.webp');
 }
 .card[for="c2"] {
-    background-image: url('img/colage2.jpg');
+    background-image: url('img/colage2.webp');
 }
 .card[for="c3"] {
-    background-image: url('img/colage3.jpg');
+    background-image: url('img/colage3.webp');
 }
 .card[for="c4"] {
-    background-image: url('img/colage4.jpg');
+    background-image: url('img/colage4.webp');
 }
 .card[for="c5"] {
-    background-image: url('img/colage5.jpg');
+    background-image: url('img/colage5.webp');
 }
 .card[for="c6"] {
-    background-image: url('img/colage6.jpg');
+    background-image: url('img/colage6.webp');
 }
 .card[for="c7"] {
-    background-image: url('img/colage7.jpg');
+    background-image: url('img/colage7.webp');
 }
 .card[for="c8"] {
-    background-image: url('img/colage8.jpg');
+    background-image: url('img/colage8.webp');
 }
 
 .desktop-collage {
