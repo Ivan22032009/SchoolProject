@@ -10,13 +10,16 @@ body {
     
     /* Світлий колір фону плюс велике зображення по центру */
     background-color: #f2f8f2; /* Якщо потрібен світло-зелений/білий фон */
-    background-image: url("img/back.jpg");
     background-repeat: no-repeat;    /* Не повторювати зображення */
     background-position: center top; /* Розміщувати зверху по центру */
-    background-size: cover;         /* Розтягувати на весь екран */
-    background-attachment: fixed;    /* Закріпити фон під час прокрутки (за бажанням) */
+    background-size: cover;         /* Розтягувати на весь екран */    /* Закріпити фон під час прокрутки (за бажанням) */
 }
 
+
+.logo img {
+    width: 210px; /* Потрібна ширина */
+    height: auto; /* Зберігаємо пропорції */
+}
 
 header {
     background-color: #3da657;
@@ -25,7 +28,7 @@ header {
 }
 
 nav {
-    background-color: #3da657; /* Зелений */
+    background-color: #ffffff; /* Зелений */
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
@@ -71,8 +74,10 @@ nav {
 }
 
 .hero {
- 
-        background-color: #3da657;
+        margin-bottom: 10px;
+        min-height: 400px;
+        width: 100%;
+        background-image:url("img/hero.jpg") ;
         background-size: cover;
         background-position: center;
         color: white;
@@ -88,12 +93,12 @@ nav {
 
 .hero p {
     font-size: 1.2rem;
-    max-width: 600px;
+    max-width: 1175px;
     margin: 0 auto 2rem;
 }
 
 .section {
-    max-width: 1100px;
+    max-width: 1175px;
     margin: 3rem auto;
     padding: 0 1.5rem;
 }
@@ -115,12 +120,58 @@ nav {
     margin: 10px auto;
 }
 
+.section-benefits {
+    position: relative; /* Щоб фон працював коректно */
+    background: url("img/wave.png") no-repeat center bottom; 
+    /* Можна змінити на top, якщо хочете, щоб хвиля була зверху */
+    background-size: contain; 
+    /* або cover / auto – залежно від бажаного вигляду */
+    
+    /* Додатково збільшіть відступ, щоб хвиля не «тиснула» на контент */
+    padding-bottom: 150px; 
+}
+
 .mission-card, .point-card, .step, .benefit {
     background: white;
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
+
+/* Приклад оформлення кожного пункту прийому */
+.point-card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    background: white;
+    padding: 2rem; /* Збільшений відступ усередині */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    width: 100%;  /* Займає всю ширину стовпчика */
+    min-height: 250px; /* Щоб блок був вищим за замовчуванням */
+  }
+  
+  /* Ліва колонка з деталями */
+  .point-details {
+    flex: 1; /* Займає весь доступний простір */
+  }
+  
+  /* Права колонка з картою */
+  .point-map {
+    width: 300px;   /* Фіксована ширина карти */
+    height: 200px;  /* Фіксована висота карти */
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  /* Щоб iframe заповнював контейнер .point-map */
+  .point-map iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
 
 .mission-cards {
     display: grid;
@@ -139,9 +190,9 @@ nav {
 
 .points-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 
 .point-card h3 {
     color: #2d8442;
@@ -960,7 +1011,7 @@ input:checked + label .description {
 }
 
 /* Мобільна версія (менше 768px) */
-@media (max-width: 1320px) {
+@media (max-width: 1300px) {
     .desktop-collage {
         display: none !important;
     }
@@ -988,4 +1039,101 @@ input:checked + label .description {
 .desktop-collage input:checked + label {
     transform: scale(1.05);
     z-index: 2;
+}
+/* Загальний контейнер під навігацією */
+.menu-container {
+    background-color: #66cccc; /* Можна змінити на потрібний відтінок */
+    padding: 10px 0;
+}
+
+/* Тло меню (можна об’єднати з .menu-container, якщо не потрібні додаткові ефекти) */
+.menu-bg {
+    /* Наприклад, якщо треба тінь або додаткова стилізація */
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
+}
+
+/* Обгортка основного меню */
+.menu-primary-menu-container {
+    max-width: 1200px; /* Задайте потрібну ширину контейнера */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Скидаємо відступи списків, робимо меню горизонтальним */
+.menu-primary-menu-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; 
+    align-items: center;
+    justify-content: center; /* або center / space-around, залежно від бажаного розташування */
+    gap: 30px; /* Відстань між пунктами меню */
+}
+
+/* Кожен пункт меню */
+.menu-primary-menu-container li {
+    position: relative; /* Потрібно для абсолютного позиціонування підменю */
+}
+
+/* Посилання у меню */
+.menu-primary-menu-container li a {
+    color: #fff; /* Білий текст */
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Ефект при наведенні на пункт меню */
+.menu-primary-menu-container li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Підменю (список) за замовчуванням приховане */
+.menu-primary-menu-container .sub-menu {
+    display: none;
+    position: absolute; 
+    top: 100%; /* Нижче основного пункту */
+    left: 0;
+    background-color: #66cccc; /* Тло підменю (той же колір або інший) */
+    min-width: 300px; /* Мінімальна ширина підменю */
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    z-index: 9999; /* Щоб перекривати інші елементи */
+}
+
+/* Відображати підменю при наведенні на батьківський пункт */
+.menu-primary-menu-container li:hover > .sub-menu {
+    display: block;
+}
+
+/* Стилі для пунктів у підменю */
+.menu-primary-menu-container .sub-menu li a {
+    display: block;
+    padding: 10px 15px;
+    color: #fff; /* Білий текст */
+    border-radius: 0;
+}
+
+/* Ефект при наведенні на пункт підменю */
+.menu-primary-menu-container .sub-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Приклад стилю для span.arrow, якщо потрібно якось виділити стрілку або текст */
+.menu-primary-menu-container .arrow {
+    /* Наприклад, щоб додати відступ чи іконку стрілочки */
+    /* padding-right: 5px; */
+    /* position: relative; */
+}
+nav {
+    margin-bottom: 0; /* Скиньте до нуля */
+}
+.menu-container {
+    margin-top: 0;  /* Скиньте до нуля */
+    /* або, якщо треба, padding-top: 0; */
 }

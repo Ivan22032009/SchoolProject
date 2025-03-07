@@ -7,56 +7,79 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitSection = document.getElementById('submitSection');
     const leaderboardTable = document.querySelector('.leaderboard-table tbody');
 
+    // Змінні для інтервалів, щоб можна було їх зупинити/перезапустити при ресайзі
+    let collageInterval = null;
+    let sliderInterval = null;
+
     function initSliders() {
-        // Для десктопу - колаж
+        // Якщо вже були інтервали, обнуляємо, щоб не дублювати
+        if (collageInterval) clearInterval(collageInterval);
+        if (sliderInterval) clearInterval(sliderInterval);
+
+        // Десктопний варіант (колаж)
         if (window.innerWidth > 1320) {
             const cards = document.querySelectorAll('.desktop-collage .card');
+            // Клік залишається, як було
             cards.forEach((card, index) => {
                 card.addEventListener('click', () => {
-                    // Логіка активації картки
                     document.getElementById(`c${index + 1}`).checked = true;
                 });
             });
-        }
-    
-        // Для мобільних - слайдер
-        else {
-            const slides = Array.from(document.querySelectorAll('.mobile-slider .item')); // Фікс тут
+
+            // Автоперемикання кожні 10 секунд
+            let currentIndex = 0;
+            collageInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % cards.length;
+                document.getElementById(`c${currentIndex + 1}`).checked = true;
+            }, 5000);
+
+        // Мобільний варіант (слайдер)
+        } else {
+            const slides = Array.from(document.querySelectorAll('.mobile-slider .item'));
             const dotsContainer = document.querySelector('.mobile-slider .dots');
             let currentSlide = 0;
-    
-            // Обмеження кількості точок до 3
-            const maxDots = 1;
-            slides.slice(0, maxDots).forEach((_, i) => {
+
+            // (Приклад із вашого коду) Ініціалізація точок
+            dotsContainer.innerHTML = ''; // Очистимо, щоб не множилися при ресайзі
+            slides.forEach((_, i) => {
                 const dot = document.createElement('li');
                 if (i === 0) dot.classList.add('active');
                 dot.addEventListener('click', () => goToSlide(i));
                 dotsContainer.appendChild(dot);
             });
-    
-            // Навігація
+
             document.getElementById('next').addEventListener('click', () => {
                 currentSlide = (currentSlide + 1) % slides.length;
                 goToSlide(currentSlide);
             });
-    
+
             document.getElementById('prev').addEventListener('click', () => {
                 currentSlide = (currentSlide - 1 + slides.length) % slides.length;
                 goToSlide(currentSlide);
             });
-    
+
             function goToSlide(index) {
                 currentSlide = index;
                 const offset = -slides[index].offsetLeft;
                 document.querySelector('.mobile-slider .list').style.transform = `translateX(${offset}px)`;
-                
-                // Оновлення точок
-                document.querySelectorAll('.mobile-slider .dots li').forEach((dot, i) => {
+                // Оновлюємо активний dot
+                const dots = dotsContainer.querySelectorAll('li');
+                dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === index);
                 });
             }
+
+            // Автоперемикання кожні 10 секунд
+            sliderInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                goToSlide(currentSlide);
+            }, 5000);
         }
     }
+
+    // Запускаємо при завантаженні та при зміні розміру
+    window.addEventListener('load', initSliders);
+    window.addEventListener('resize', initSliders);
     
     // Ініціалізація при завантаженні та зміні розміру
     window.addEventListener('load', initSliders);

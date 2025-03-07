@@ -7,76 +7,178 @@
     <title>EcoFast - Екологічна ініціатива Умані</title>
 </head>
  <body>
-        <nav>
-            <a href="index.html" class="logo">🌱 EcoTrack</a>
-            <div class="nav-links">
-                <a href="about.html">Шкільні проекти</a>
-                <a href="school-project.html">Шкільні проекти</a>
-                <a href="ps.html">Правильне сортування</a>
-                <a href="#" class="authButton">Увійти</a>
+    <nav>
+        <a href="index.html" class="logo"><img src="img/logo.png" alt=""></a>
+        <div class="nav-links">
+            <span class="userNav" style="display: none; color: white; padding: 8px 16px; border-radius: 6px;"></span>
+            <a href="login.html" class="authButton">Увійти</a> <!-- Оновлена кнопка -->
+            <a href="cabinet.html" class="cabinetLink" style="display: none;">Кабінет</a>
+        </div>
+    </nav>
+        <div class="menu-container">
+            <div class="menu-bg">
+                <div class="ruby-container">
+                    <div class="menu-primary-menu-container">
+                        <ul id="menu-primary-menu" class="menu">
+                            <li id="menu-item-646" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-646">
+                                <a href="about.html">
+                                    <span class="arrow">Про проект</span>
+                                </a>
+                                <li id="menu-item-646" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-646">
+                                <a href="school-project.html">
+                                    <span class="arrow">Проєкти, конкурси</span>
+                                </a>
+                                <li id="menu-item-646" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-646">
+                                <a href="ps.html">
+                                    <span class="arrow">Правильне сортування</span>
+                                </a>
+                                <li id="menu-item-646" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-646">
+                                <a href="https://petition.e-dem.ua/uman/Petition/View/107">
+                                    <span class="arrow">Міські петиції</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </nav>
+        </div>
 
     <section id="points" class="section">
         <h2>Пункти прийому</h2>
         <div class="points-grid">
             <div class="point-card">
-                <h3>Пункт прийому "ЕкоСвіт"</h3>
-                <div class="point-info">
+                <div class="point-details">
+                  <h3>Пункт прийому "ЕкоСвіт"</h3>
+                  <div class="point-info">
                     <p><strong>Адреса:</strong> вул. Європейська, 65</p>
                     <p><strong>Приймає:</strong> пластик, папір, скло</p>
                     <p><strong>Графік:</strong> 09:00 - 18:00</p>
+                  </div>
                 </div>
-            </div>
-            <div class="point-card">
-                <h3>Центр сортування "Еко+"</h3>
-                <div class="point-info">
-                    <p><strong>Адреса:</strong> вул. Незалежності, 23</p>
-                    <p><strong>Приймає:</strong> всі види відходів</p>
-                    <p><strong>Графік:</strong> 10:00 - 17:00</p>
+                <div class="point-map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2630.1448768724513!2d30.212195076497874!3d48.760029571318974!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d20d74b926c535%3A0x34930a483cf73785!2z0LLRg9C70LjRhtGPINCE0LLRgNC-0L_QtdC50YHRjNC60LAsIDY1LCDQo9C80LDQvdGMLCDQp9C10YDQutCw0YHRjNC60LAg0L7QsdC70LDRgdGC0YwsIDIwMzAw!5e0!3m2!1sru!2sua!4v1741338902142!5m2!1sru!2sua"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
                 </div>
-            </div>
-            <div class="point-card">
-                <h3>Пункт "Зелений"</h3>
-                <div class="point-info">
-                    <p><strong>Адреса:</strong> вул. Грушевського, 115</p>
-                    <p><strong>Приймає:</strong> пластик, метал</p>
-                    <p><strong>Графік:</strong> 08:00 - 16:00</p>
+              </div>
+              <div class="point-card">
+                <div class="point-details">
+                    <h3>Центр сортування "Еко+"</h3>
+                    <div class="point-info">
+                        <p><strong>Адреса:</strong> вул. Незалежності, 23</p>
+                        <p><strong>Приймає:</strong> всі види відходів</p>
+                        <p><strong>Графік:</strong> 10:00 - 17:00</p>
+                  </div>
                 </div>
-            </div>
-            <div class="point-card">
-                <h3>Пункт прийому "Уманьпиво"</h3>
-                <div class="point-info">
-                    <p><strong>Адреса:</strong> вул. Тищика, 12</p>
-                    <p><strong>Приймає:</strong> склотара, пластик</p>
-                    <p><strong>Графік:</strong> 05:00 - 23:00</p>
+                <div class="point-map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3064.3464663027307!2d30.21592270359362!3d48.744804363927294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d20daf09a95cc7%3A0x785883dd5eafce0a!2z0YPQuy4g0J7QutGC0Y_QsdGA0YHRjNC60L7QuSDQoNC10LLQvtC70Y7RhtC40LgsIDIzLCDQo9C80LDQvdGMLCDQp9C10YDQutCw0YHRgdC60LDRjyDQvtCx0LvQsNGB0YLRjCwgMjAzMDA!5e0!3m2!1sru!2sua!4v1741340434410!5m2!1sru!2sua"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
                 </div>
-            </div>
-            <div class="point-card">
-                <h3>Пункт прийому "Чисте місто"</h3>
-                <div class="point-info">
-                    <p><strong>Адреса:</strong> вул. Садова, 47</p>
-                    <p><strong>Приймає:</strong> метал, пластик</p>
-                    <p><strong>Графік:</strong> 09:00 - 18:00</p>
+              </div>
+              <div class="point-card">
+                <div class="point-details">
+                    <h3>Пункт "Зелений"</h3>
+                    <div class="point-info">
+                        <p><strong>Адреса:</strong> вул. Грушевського, 115</p>
+                        <p><strong>Приймає:</strong> пластик, метал</p>
+                        <p><strong>Графік:</strong> 08:00 - 16:00</p>
+                  </div>
                 </div>
-            </div>
-            <div class="point-card">
-                <h3>Пункт прийому "GreenWay"</h3>
-                <div class="point-info">
-                    <p><strong>Адреса:</strong> вул. Визволителів, 22</p>
-                    <p><strong>Приймає:</strong> папір, пластик, скло</p>
-                    <p><strong>Графік:</strong> 08:30 - 17:30</p>
+                <div class="point-map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2630.24567892154!2d30.211131176497755!3d48.75810447131877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d20d0b3c7c3849%3A0x505bafbd5f449e12!2z0LLRg9C70LjRhtGPINCT0YDRg9GI0LXQstGB0YzQutC-0LPQviwgMTE1LCDQo9C80LDQvdGMLCDQp9C10YDQutCw0YHRjNC60LAg0L7QsdC70LDRgdGC0YwsIDIwMzAw!5e0!3m2!1suk!2sua!4v1741340819344!5m2!1suk!2sua"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
                 </div>
-            </div>
-            <div class="point-card">
-                <h3>Пункт прийому "Екологічний дім"</h3>
-                <div class="point-info">
-                    <p><strong>Адреса:</strong> вул. Європейська, 74</p>
-                    <p><strong>Приймає:</strong> електронні відходи, батарейки</p>
-                    <p><strong>Графік:</strong> 09:00 - 16:30</p>
+              </div>
+              <div class="point-card">
+                <div class="point-details">
+                    <h3>Пункт прийому "Чисте місто"</h3>
+                    <div class="point-info">                     
+                        <p><strong>Адреса:</strong> вул. Тищика, 4</p>
+                        <p><strong>Приймає:</strong> склотара, пластик</p>
+                        <p><strong>Графік:</strong> 05:00 - 23:00</p>
+                  </div>
                 </div>
-            </div>
-        </div>
+                <div class="point-map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d578.4209886019526!2d30.210864558667296!3d48.758018306829555!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d20d0b644843db%3A0x4f1e42d63fd0e7b0!2z0LLRg9C70LjRhtGPINCi0LjRidC40LrQsCwgNCwg0KPQvNCw0L3RjCwg0KfQtdGA0LrQsNGB0YzQutCwINC-0LHQu9Cw0YHRgtGMLCAyMDMwMA!5e0!3m2!1suk!2sua!4v1741341225535!5m2!1suk!2sua"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+              </div>
+              <div class="point-card">
+                <div class="point-details">
+                    <h3>Пункт прийому "GreenWay"</h3>
+                    <div class="point-info">
+                        <p><strong>Адреса:</strong> вул. Визволителів, 22</p>
+                        <p><strong>Приймає:</strong> папір, пластик, скло</p>
+                        <p><strong>Графік:</strong> 08:30 - 17:30</p>
+                </div>
+                </div>
+                <div class="point-map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22464.444825385028!2d30.216573754990936!3d48.7502087073975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d20deb2b946ff3%3A0x2c5ec600138e6b4b!2z0LLRg9C70LjRhtGPINCS0LjQt9Cy0L7Qu9C40YLQtdC70ZbQsiwgMjIsINCj0LzQsNC90YwsINCn0LXRgNC60LDRgdGM0LrQsCDQvtCx0LvQsNGB0YLRjCwgMjAzMDA!5e0!3m2!1suk!2sua!4v1741341475929!5m2!1suk!2sua"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+              </div>
+              <div class="point-card">
+                <div class="point-details">
+                    <h3>Пункт прийому "Чисте місто"</h3>
+                    <div class="point-info">
+                        <p><strong>Адреса:</strong> вул. Коломенська вулиця, 1/2</p>
+                        <p><strong>Приймає:</strong> метал, пластик</p>
+                        <p><strong>Графік:</strong> 09:00 - 18:00</p>
+                  </div>
+                </div>
+                <div class="point-map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d164.4233762570526!2d30.218430256992622!3d48.748013375389654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d20da5e6ddb161%3A0x3a0d8425e1d75f08!2z0JrQvtC70L7QvNC10L3RgdGM0LrQsCDQstGD0LvQuNGG0Y8sIDEvMiwg0KPQvNCw0L3RjCwg0KfQtdGA0LrQsNGB0YzQutCwINC-0LHQu9Cw0YHRgtGMLCAyMDMwMA!5e0!3m2!1suk!2sua!4v1741341597497!5m2!1suk!2sua"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+              </div>
+              <div class="point-card">
+                <div class="point-details">
+                    <h3>Пункт прийому "Екологічний дім"</h3>
+                    <div class="point-info">
+                        <p><strong>Адреса:</strong> вул. Європейська, 74</p>
+                        <p><strong>Приймає:</strong> електронні відходи, батарейки</p>
+                        <p><strong>Графік:</strong> 09:00 - 16:30</p>
+                  </div>
+                </div>
+                <div class="point-map">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2629.942274152295!2d30.211665276498145!3d48.76389867131952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d20d73c57fef29%3A0x478495ac0cb63128!2z0LLRg9C70LjRhtGPINCE0LLRgNC-0L_QtdC50YHRjNC60LAsIDc0LCDQo9C80LDQvdGMLCDQp9C10YDQutCw0YHRjNC60LAg0L7QsdC70LDRgdGC0YwsIDIwMzAw!5e0!3m2!1suk!2sua!4v1741341637926!5m2!1suk!2sua"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+              </div>
     </section>
 
     <footer>
