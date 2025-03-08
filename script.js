@@ -172,6 +172,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Завантажити лідерборд одразу
     loadLeaderboard();
 
+    const chooseFileBtn = document.getElementById('chooseFileBtn');
+    const photoInput = document.getElementById('photoInput');
+  
+    if (chooseFileBtn && photoInput) {
+      chooseFileBtn.addEventListener('click', () => {
+        photoInput.click();
+      });
+    }
+
     document.getElementById('wasteForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const file = document.getElementById('photoInput').files[0];
@@ -222,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitModal.style.display = 'none';
         });
     }
+
 
     // Допоміжні функції
     const showSuccessMessage = (text) => {

@@ -274,17 +274,36 @@
 <!-- Модальне вікно для введення ваги -->
 <div id="submitModal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <form id="wasteForm" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>Прикріпити фото:</label>
-                <input type="file" id="photoInput" accept="image/*">
-
-            </div>
-            <button type="submit">Надіслати фото</button>
-        </form>
+      <span class="close">&times;</span>
+      <form id="wasteForm" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="photoInput">Прикріпити фото:</label>
+          
+          <!-- Прихований інпут -->
+          <input 
+            type="file" 
+            id="photoInput" 
+            accept="image/*"
+            style="display: none;"
+          >
+          
+          <!-- Кнопка, що візуально замінює інпут -->
+          <button 
+            type="button" 
+            id="chooseFileBtn"
+            class="cta-button"
+          >
+            Вибрати фото
+          </button>
+        </div>
+        
+        <!-- Кнопка для надсилання -->
+        <button type="submit" class="cta-button">
+          Надіслати фото
+        </button>
+      </form>
     </div>
-</div>
+  </div>
             <tbody>
                 <!-- Дані будуть додані через JavaScript -->
             </tbody>
