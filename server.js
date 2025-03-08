@@ -1,4 +1,5 @@
 require('dotenv').config();
+const API_BASE_URL = 'https://schoolproject-1-kkzu.onrender.com';
 const mongoose = require('mongoose');
 const express = require('express');
 const bcrypt = require('bcryptjs');
