@@ -223,32 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Обробник форми здачі сміття
-    document.getElementById('wasteForm')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const weightInput = document.getElementById('weightInput');
-        
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/submit-waste`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authToken}`
-                },
-                body: JSON.stringify({ weight: parseFloat(weightInput.value) })
-            });
-
-            if (!response.ok) throw new Error('Помилка здачі сміття');
-            
-            submitModal.style.display = 'none';
-            weightInput.value = '';
-            loadLeaderboard();
-            showSuccessMessage('Дані успішно надіслано!');
-        } catch (error) {
-            showErrorMessage(error.message);
-        }
-    });
-
     // Допоміжні функції
     const showSuccessMessage = (text) => {
         const message = document.createElement('div');
