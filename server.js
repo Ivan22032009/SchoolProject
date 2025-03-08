@@ -170,7 +170,7 @@ app.post('/api/submit-photo', upload.single('photo'), async (req, res) => {
           return res.status(400).json({ error: "Фото не прикріплено" });
       }
 
-      // Нараховуємо 1 бал за фото
+      // Нараховуємо 1 бал за фото та оновлюємо суму балів користувача
       user.totalPoints = (user.totalPoints || 0) + 1;
       
       // (Опційно) Записуємо інформацію про фото у користувача
@@ -180,17 +180,17 @@ app.post('/api/submit-photo', upload.single('photo'), async (req, res) => {
       user.submissions.push({ photo: photo.filename, date: new Date() });
       await user.save();
 
-      // Додаємо запис до глобального масиву дописів
-      submissions.push({
+      // Додаємо запис до глобального масиву дописів за допомогою unshift, щоб новий запис був на початку
+      submissions.unshift({
           firstName: user.firstName,
           lastName: user.lastName,
           photo: photo.filename,
-          points: 1,
+          points: user.totalPoints,  // відображаємо накопичені бали
           date: new Date()
       });
-      // Залишаємо лише останні 5 записів
+      // Якщо записів більше 5, видаляємо останній запис
       if (submissions.length > 5) {
-          submissions.shift();
+          submissions.pop();
       }
 
       res.json({ message: "Фото успішно надіслано!", totalPoints: user.totalPoints, submissions });

@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userNav.style.display = 'inline-block';
             userNav.textContent = `${user.firstName} ${user.lastName}`;
         }
-        if (submitSection) submitSection.style.display = 'block';
+        if (submitSection) submitSection.style.display = 'block'; // показуємо кнопку
     };
 
     // Перевірка авторизації та завантаження даних
