@@ -15,7 +15,7 @@
   /* Загальні стилі для навігації */
   nav {
     margin-bottom: 0; 
-    background-color: #ffffff;
+    background-color: #f2f8f2;
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     display: flex;
