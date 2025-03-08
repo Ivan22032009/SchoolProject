@@ -172,14 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Завантажити лідерборд одразу
     loadLeaderboard();
 
-    document.getElementById('wasteForm')?.addEventListener('submit', async (e) => {
+    document.getElementById('wasteForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const photoInput = document.getElementById('photoInput');
-        const file = photoInput.files[0];
+        const file = document.getElementById('photoInput').files[0];
     
         if (!file) {
             alert('Будь ласка, виберіть фото.');
-            return;
+            return; // Остановить отправку
         }
     
         const formData = new FormData();
@@ -214,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (submitWasteBtn) {
         submitWasteBtn.addEventListener('click', () => {
-            submitModal.style.display = 'block';
+            submitModal.style.display = 'flex';
         });
     }
 
