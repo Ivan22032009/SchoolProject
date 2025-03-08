@@ -275,12 +275,12 @@
 <div id="submitModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <form id="wasteForm">
+        <form id="wasteForm" enctype="multipart/form-data">
             <div class="form-group">
-                <label>Кількість кг:</label>
-                <input type="number" id="weightInput" step="0.1" required>
+                <label>Прикріпити фото:</label>
+                <input type="file" id="photoInput" accept="image/*" required>
             </div>
-            <button type="submit">Надіслати</button>
+            <button type="submit">Надіслати фото</button>
         </form>
     </div>
 </div>

@@ -159,12 +159,11 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`${API_BASE_URL}/api/leaderboard`)
             .then(response => response.json())
             .then(data => {
-                leaderboardTable.innerHTML = data.map((user, index) => `
+                leaderboardTable.innerHTML = data.map((submission) => `
                     <tr>
-                        <td>${index + 1}</td>
-                        <td>${user.firstName} ${user.lastName}</td>
-                        <td>${user.totalWeight} кг</td>
-                        <td>${user.totalPoints}</td>
+                        <td>${submission.firstName} ${submission.lastName}</td>
+                        <td><img src="${API_BASE_URL}/uploads/${submission.photo}" alt="Фото" width="100"></td>
+                        <td>${submission.points}</td>
                     </tr>
                 `).join('');
             });
@@ -172,6 +171,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Завантажити лідерборд одразу
     loadLeaderboard();
+
+    document.getElementById('wasteForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const photoInput = document.getElementById('photoInput');
+        const file = photoInput.files[0];
+    
+        if (!file) {
+            alert('Будь ласка, виберіть фото.');
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('photo', file);
+    
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/submit-photo`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: formData
+            });
+    
+            if (!response.ok) throw new Error('Помилка надсилання фото');
+            
+            const result = await response.json();
+            submitModal.style.display = 'none';
+            photoInput.value = '';
+            loadLeaderboard();
+            showSuccessMessage('Фото успішно надіслано!');
+        } catch (error) {
+            showErrorMessage(error.message);
+        }
+    });
+    
 
     // Обробник кнопки "Я здав сміття"
     const submitWasteBtn = document.getElementById('submitWaste');
