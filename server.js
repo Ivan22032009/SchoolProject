@@ -31,7 +31,7 @@ const upload = multer({ storage: multer.memoryStorage() })
 const corsOptions = {
   origin: ['https://schoolproject12.netlify.app', 'https://ecofast.space'],
   methods: ['GET', 'POST', 'PUT'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'] // Видалено зайвий масив
 };
 app.use(cors(corsOptions));
 
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
     "script-src 'self' https://schoolproject-1-kkzu.onrender.com;" +
     "default-src 'self';" +
     "style-src 'self' 'unsafe-inline';" +
-    "img-src 'self' data:;"
+    "img-src 'self' data: https://*.r2.dev;" // Об'єднано в одну директиву
   );
   next();
 });
@@ -180,7 +180,7 @@ async function uploadFileToR3(fileBuffer, filename, mimetype) {
   try {
     await s3Client.send(command);
     // URL файлу (якщо бакет публічний або ви використовуєте інший метод доступу)
-    const fileUrl = `https://${process.env.CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com/ecofast/${filename}`;
+    const fileUrl = `https://pub-${process.env.CLOUDFLARE_R2_BUCKET}.r2.dev/${filename}`; // Видалено зайву ;
     return fileUrl;
   } catch (error) {
     console.error("Помилка завантаження:", error);
@@ -239,7 +239,9 @@ app.post('/api/submit-photo', upload.single('photo'), async (req, res) => {
 
 
 app.get('/api/leaderboard', (req, res) => {
-  // Повертаємо останні 5 дописів
+  submissions.forEach(entry => {
+    entry.photo += `?${Date.now()}`; // Уникаємо кешування
+});
   res.json(submissions);
 });
 app.use('/uploads', express.static('uploads'));
