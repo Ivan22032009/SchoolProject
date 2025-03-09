@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const userNav = document.querySelector('.userNav');
     const submitSection = document.getElementById('submitSection');
     const leaderboardTable = document.querySelector('.leaderboard-table tbody');
-    console.log('Bucket:', process.env.CLOUDFLARE_R2_BUCKET);
 
 
     // Змінні для інтервалів, щоб можна було їх зупинити/перезапустити при ресайзі
@@ -257,4 +256,5 @@ document.addEventListener('DOMContentLoaded', () => {
             submitModal.style.display = 'none';
         }
     };
+    console.log('Bucket:', process.env.CLOUDFLARE_R2_BUCKET);
 });
