@@ -508,3 +508,41 @@ input:checked + label .description {
     opacity: 1 !important;
     transform: translateY(0) !important;
 }
+/* Стили для таблиці рейтингу топ 10 учасників */
+.top10-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem auto;
+    max-width: 800px; /* Максимальна ширина таблиці */
+  }
+  
+  .top10-table th,
+  .top10-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .top10-table th {
+    background-color: #1f5f32;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .top10-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  
+  .top10-table tr:hover {
+    background-color: #e0f2e9;
+  }
+  
+  /* Адаптивні стилі для мобільних пристроїв */
+  @media (max-width: 768px) {
+    .top10-table th,
+    .top10-table td {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+ 

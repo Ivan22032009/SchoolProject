@@ -244,6 +244,21 @@ app.get('/api/leaderboard', (req, res) => {
 });
   res.json(submissions);
 });
+
+app.get('/api/top10', async (req, res) => {
+  try {
+    // Знаходимо користувачів, сортуємо за totalPoints за спаданням, беремо перших 10
+    const topUsers = await User.find({})
+      .sort({ totalPoints: -1 })
+      .limit(10)
+      .select('firstName lastName totalPoints');
+    res.json(topUsers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 app.use('/uploads', express.static('uploads'));
 // Запуск сервера
 const PORT = process.env.PORT || 10000;

@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
+    }
   body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -326,4 +326,25 @@ nav a:hover {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+@media (max-width: 768px) {
+  /* Робимо всі кнопки класу .cta-button, .authButton, .cabinetLink адаптивними */
+  .cta-button,
+  .authButton,
+  .cabinetLink {
+    display: block;         /* Робимо кнопку блоковою, щоб займати всю ширину */
+    width: 90%;             /* Займають 90% ширини екрану */
+    margin: 10px auto;      /* Відступи зверху/знизу та центрування */
+    padding: 15px;          /* Збільшені внутрішні відступи для зручності тапу */
+    font-size: 1.2rem;      /* Збільшений розмір шрифту для кращої читабельності */
+    text-align: center;
+  }
+
+  /* Якщо навігаційні кнопки розташовані в контейнері, можна зробити їх вертикальними */
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
 }

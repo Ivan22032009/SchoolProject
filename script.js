@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitSection = document.getElementById('submitSection');
     const leaderboardTable = document.querySelector('.leaderboard-table tbody');
 
-
     // Змінні для інтервалів, щоб можна було їх зупинити/перезапустити при ресайзі
     let collageInterval = null;
     let sliderInterval = null;
@@ -256,4 +255,28 @@ document.addEventListener('DOMContentLoaded', () => {
             submitModal.style.display = 'none';
         }
     };
+    const loadTop10 = () => {
+        fetch(`${API_BASE_URL}/api/top10`)
+          .then(response => response.json())
+          .then(data => {
+            const top10TableBody = document.querySelector('.top10-table tbody');
+            let html = data.map((user, index) => `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${user.firstName} ${user.lastName}</td>
+                <td>${user.totalPoints || 0}</td>
+              </tr>
+            `).join('');
+            top10TableBody.innerHTML = html;
+          })
+          .catch(error => console.error('Error loading top10:', error));
+      };
+      
+      // Викликаємо завантаження топ10 після завантаження сторінки
+      document.addEventListener('DOMContentLoaded', () => {
+        // ... ваш існуючий код ...
+        
+        loadTop10();
+      });
+      
 });
