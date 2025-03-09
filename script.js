@@ -256,5 +256,4 @@ document.addEventListener('DOMContentLoaded', () => {
             submitModal.style.display = 'none';
         }
     };
-    console.log('Bucket:', process.env.CLOUDFLARE_R2_BUCKET);
 });

@@ -162,10 +162,10 @@ const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const s3Client = new S3Client({
   region: 'auto',
-  endpoint: `https://${process.env.CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  endpoint: `https://5422d97df114d5f4a097bb028d9910f5.r2.cloudflarestorage.com`,
   credentials: {
-    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY,
-    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_KEY
+    accessKeyId: `19c60f74917aa98ae9e35ec09b95408a`,
+    secretAccessKey: `c8240d323976e7dddb8050e02451e9e2353ef47af5b2921cd22e0a3ad7b29cd6`
   }
 });
 
