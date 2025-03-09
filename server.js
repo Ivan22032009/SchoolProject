@@ -180,7 +180,7 @@ async function uploadFileToR3(fileBuffer, filename, mimetype) {
   try {
     await s3Client.send(command);
     // URL файлу (якщо бакет публічний або ви використовуєте інший метод доступу)
-    const fileUrl = `https://${process.env.CLOUDFLARE_R2_BUCKET}.${process.env.CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${filename}`;
+    const fileUrl = `https://5422d97df114d5f4a097bb028d9910f5.r2.cloudflarestorage.com/ecofast/${filename}`;
     return fileUrl;
   } catch (error) {
     console.error("Помилка завантаження:", error);
