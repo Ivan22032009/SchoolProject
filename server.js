@@ -11,7 +11,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const app = express();
-console.log('Bucket:', process.env.CLOUDFLARE_R2_BUCKET);
 let submissions = [];
 const uploadDir = 'uploads';
 if (!fs.existsSync(uploadDir)){
