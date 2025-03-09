@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
      cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage() })
 
 // ==================== Налаштування CORS ====================
 const corsOptions = {
@@ -164,8 +164,8 @@ const s3Client = new S3Client({
   region: 'auto',
   endpoint: `https://5422d97df114d5f4a097bb028d9910f5.r2.cloudflarestorage.com`,
   credentials: {
-    accessKeyId: `19c60f74917aa98ae9e35ec09b95408a`,
-    secretAccessKey: `c8240d323976e7dddb8050e02451e9e2353ef47af5b2921cd22e0a3ad7b29cd6`
+    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY,
+    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_KEY
   }
 });
 
@@ -189,46 +189,54 @@ async function uploadFileToR3(fileBuffer, filename, mimetype) {
 }
 
 app.post('/api/submit-photo', upload.single('photo'), async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: "Не авторизовано" });
-
   try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded.id);
-      if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
-      
-      const photo = req.file;
-      if (!photo) {
-          return res.status(400).json({ error: "Фото не прикріплено" });
-      }
+    // Перевірка авторизації
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: "Не авторизовано" });
 
-      // Завантаження файлу до Cloudflare R2
-      const fileUrl = await uploadFileToR3(photo.buffer || fs.readFileSync(photo.path), photo.filename, photo.mimetype);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
 
-      // Нараховуємо 1 бал та оновлюємо користувача
-      user.totalPoints = (user.totalPoints || 0) + 1;
-      if (!user.submissions) user.submissions = [];
-      user.submissions.push({ photo: fileUrl, date: new Date() });
-      await user.save();
+    // Якщо використовуєте memoryStorage
+    const photo = req.file;
+    if (!photo) {
+      return res.status(400).json({ error: "Фото не прикріплено" });
+    }
 
-      // Додаємо запис до глобального масиву (нове фото - на початку)
-      submissions.unshift({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          photo: fileUrl, // зберігаємо URL замість локального імені файлу
-          points: user.totalPoints,
-          date: new Date()
-      });
-      if (submissions.length > 5) {
-          submissions.pop();
-      }
+    // Згенеруємо унікальну назву, поєднуючи час та оригінальну назву
+    const uniqueFilename = `${Date.now()}-${photo.originalname}`;
 
-      res.json({ message: "Фото успішно надіслано!", totalPoints: user.totalPoints, submissions });
+    // Завантажуємо в Cloudflare R2
+    const fileUrl = await uploadFileToR3(
+      photo.buffer,        // Буфер файлу
+      uniqueFilename,      // Назва файлу (Key)
+      photo.mimetype       // MIME-тип
+    );
+
+    // Оновлюємо дані користувача та глобальний масив submissions
+    user.totalPoints = (user.totalPoints || 0) + 1;
+    if (!user.submissions) user.submissions = [];
+    user.submissions.push({ photo: fileUrl, date: new Date() });
+    await user.save();
+
+    submissions.unshift({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      photo: fileUrl,
+      points: user.totalPoints,
+      date: new Date()
+    });
+    if (submissions.length > 5) submissions.pop();
+
+    res.json({ message: "Фото успішно надіслано!", totalPoints: user.totalPoints, submissions });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Помилка сервера" });
+    console.error(error);
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
+
+
 
 app.get('/api/leaderboard', (req, res) => {
   // Повертаємо останні 5 дописів
