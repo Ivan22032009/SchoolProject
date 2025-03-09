@@ -2,14 +2,20 @@
     margin-bottom: 10px;
     min-height: 400px;
     width: 100%;
-    background-image:url("../img/hero.webp") ;
+    background-image: url("../img/hero.webp");
     background-size: cover;
     background-position: center;
     color: white;
     padding: 4rem 2rem;
     text-align: center;
-
-}
+  }
+  
+  /* Для екранів до 768px — інше зображення */
+  @media only screen and (max-width: 768px) {
+    .hero {
+      background-image: url("../img/hero_mobile.webp");
+    }
+  }
 
 .hero h1 {
 font-size: 2.5rem;

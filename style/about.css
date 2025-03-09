@@ -1,0 +1,17 @@
+.directions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .direction-item {
+    text-align: center;
+  }
+  
+  .direction-item img {
+    width: 64px; /* Підберіть розмір під ваш дизайн */
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  
