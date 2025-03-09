@@ -161,12 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 leaderboardTable.innerHTML = data.map((submission) => `
-                    <tr>
-                        <td>${submission.firstName} ${submission.lastName}</td>
-                        <td><img src="${API_BASE_URL}/uploads/${submission.photo}" alt="Фото" width="100"></td>
-                        <td>${submission.points}</td>
-                    </tr>
-                `).join('');
+                <tr>
+                  <td>${submission.firstName} ${submission.lastName}</td>
+                  <td><img src="${submission.photo}" alt="Фото" width="100"></td>
+                  <td>${submission.points}</td>
+                </tr>
+            `).join('');
             });
     };
 
