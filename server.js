@@ -25,7 +25,8 @@ const storage = multer.diskStorage({
      cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
+
 // ==================== Налаштування CORS ====================
 const corsOptions = {
   origin: ['https://schoolproject12.netlify.app', 'https://ecofast.space'],
@@ -156,6 +157,37 @@ app.put('/api/change-password', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+
+const s3Client = new S3Client({
+  region: 'auto',
+  endpoint: `https://${process.env.CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY,
+    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_KEY
+  }
+});
+
+async function uploadFileToR3(fileBuffer, filename, mimetype) {
+  const command = new PutObjectCommand({
+    Bucket: process.env.CLOUDFLARE_R2_BUCKET,
+    Key: filename,
+    Body: fileBuffer,
+    ContentType: mimetype
+  });
+
+  try {
+    await s3Client.send(command);
+    // URL файлу (якщо бакет публічний або ви використовуєте інший метод доступу)
+    const fileUrl = `https://${process.env.CLOUDFLARE_R2_BUCKET}.${process.env.CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${filename}`;
+    return fileUrl;
+  } catch (error) {
+    console.error("Помилка завантаження:", error);
+    throw error;
+  }
+}
+
 app.post('/api/submit-photo', upload.single('photo'), async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: "Не авторизовано" });
@@ -170,25 +202,23 @@ app.post('/api/submit-photo', upload.single('photo'), async (req, res) => {
           return res.status(400).json({ error: "Фото не прикріплено" });
       }
 
-      // Нараховуємо 1 бал за фото та оновлюємо суму балів користувача
+      // Завантаження файлу до Cloudflare R2
+      const fileUrl = await uploadFileToR3(photo.buffer || fs.readFileSync(photo.path), photo.filename, photo.mimetype);
+
+      // Нараховуємо 1 бал та оновлюємо користувача
       user.totalPoints = (user.totalPoints || 0) + 1;
-      
-      // (Опційно) Записуємо інформацію про фото у користувача
-      if (!user.submissions) {
-          user.submissions = [];
-      }
-      user.submissions.push({ photo: photo.filename, date: new Date() });
+      if (!user.submissions) user.submissions = [];
+      user.submissions.push({ photo: fileUrl, date: new Date() });
       await user.save();
 
-      // Додаємо запис до глобального масиву дописів за допомогою unshift, щоб новий запис був на початку
+      // Додаємо запис до глобального масиву (нове фото - на початку)
       submissions.unshift({
           firstName: user.firstName,
           lastName: user.lastName,
-          photo: photo.filename,
-          points: user.totalPoints,  // відображаємо накопичені бали
+          photo: fileUrl, // зберігаємо URL замість локального імені файлу
+          points: user.totalPoints,
           date: new Date()
       });
-      // Якщо записів більше 5, видаляємо останній запис
       if (submissions.length > 5) {
           submissions.pop();
       }
@@ -199,6 +229,7 @@ app.post('/api/submit-photo', upload.single('photo'), async (req, res) => {
       res.status(500).json({ error: "Помилка сервера" });
   }
 });
+
 app.get('/api/leaderboard', (req, res) => {
   // Повертаємо останні 5 дописів
   res.json(submissions);
