@@ -76,6 +76,7 @@ nav a:hover {
 }
 .cabinetLink {
   display: none; /* Приховано за замовчуванням */
+  margin-top: 20px;
 }
 
   .authButton {
@@ -84,7 +85,6 @@ nav a:hover {
     padding: 8px 16px;
     border-radius: 6px;
     text-decoration: none;
-    margin-top: 20px;
     transition: background-color 0.3s ease;
   }
   .authButton:hover {
