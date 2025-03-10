@@ -122,10 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (authButton) authButton.textContent = 'Вийти';
         if (userNav) {
             userNav.style.display = 'inline-block';
-            userNav.textContent = `${user.firstName} ${user.lastName}`;
+            // Якщо totalPoints не визначено, виводимо 0
+            userNav.textContent = `${user.firstName} ${user.lastName} (${user.totalPoints || 0} бали)`;
         }
-        if (submitSection) submitSection.style.display = 'block'; // показуємо кнопку
+        if (submitSection) submitSection.style.display = 'block';
     };
+    
 
     // Перевірка авторизації та завантаження даних
     if (authToken) {

@@ -108,7 +108,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Отримання даних користувача
 app.get('/api/user', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: "Не авторизовано" });
@@ -125,13 +124,14 @@ app.get('/api/user', async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      avatar: user.avatar
+      avatar: user.avatar,
+      totalPoints: user.totalPoints || 0  // Додаємо бали
     });
-
   } catch (error) {
     res.status(401).json({ error: "Недійсний токен" });
   }
 });
+
 
 // Зміна паролю
 app.put('/api/change-password', async (req, res) => {
