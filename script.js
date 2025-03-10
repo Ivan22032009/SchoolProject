@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <tr>
                         <td>${index + 1}</td>
                         <td>${user.firstName} ${user.lastName}</td>
-                        <td>${user.points}</td>
+                        <td>${user.totalPoints}</td>
                     </tr>
                 `).join('');
                 top10TableBody.innerHTML = html;
