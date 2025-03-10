@@ -201,38 +201,41 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    document.getElementById('wasteForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const file = document.getElementById('photoInput').files[0];
-    
-        if (!file) {
-            alert('Будь ласка, виберіть фото.');
-            return; // Остановить отправку
-        }
-    
-        const formData = new FormData();
-        formData.append('photo', file);
-    
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/submit-photo`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`
-                },
-                body: formData
-            });
-    
-            if (!response.ok) throw new Error('Помилка надсилання фото');
-            
-            const result = await response.json();
-            submitModal.style.display = 'none';
-            photoInput.value = '';
-            loadLeaderboard();
-            showSuccessMessage('Фото успішно надіслано!');
-        } catch (error) {
-            showErrorMessage(error.message);
-        }
-    });
+// Обробник форми надсилання фотографії
+document.getElementById('wasteForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const file = document.getElementById('photoInput').files[0];
+
+    if (!file) {
+        alert('Будь ласка, виберіть фото.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/submit-photo`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Помилка надсилання фото');
+
+        const result = await response.json();
+        submitModal.style.display = 'none';
+        photoInput.value = '';
+        loadLeaderboard(); // Оновлюємо рейтинг
+        loadTop10();       // Оновлюємо таблицю топ 10
+        showSuccessMessage('Фото успішно надіслано!');
+    } catch (error) {
+        showErrorMessage(error.message);
+    }
+});
+
     
 
     // Обробник кнопки "Я здав сміття"
