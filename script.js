@@ -264,13 +264,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <tr>
                 <td>${index + 1}</td>
                 <td>${user.firstName} ${user.lastName}</td>
-                <td>${submission.points}</td>
+                <td>${user.points}</td>
               </tr>
             `).join('');
             top10TableBody.innerHTML = html;
           })
           .catch(error => console.error('Error loading top10:', error));
-      };
+    };
       
       // Викликаємо завантаження топ10 після завантаження сторінки
       document.addEventListener('DOMContentLoaded', () => {
