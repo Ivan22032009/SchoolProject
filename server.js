@@ -249,9 +249,9 @@ app.get('/api/top10', async (req, res) => {
   try {
     // Знаходимо користувачів, сортуємо за totalPoints за спаданням, беремо перших 10
     const topUsers = await User.find({})
-      .sort({ totalPoints: -1 })
+      .sort({points: -1 })
       .limit(10)
-      .select('firstName lastName totalPoints');
+      .select('firstName lastName points');
     res.json(topUsers);
   } catch (error) {
     res.status(500).json({ error: error.message });

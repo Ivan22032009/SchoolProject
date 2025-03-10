@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userNav) {
             userNav.style.display = 'inline-block';
             // Якщо totalPoints не визначено, виводимо 0
-            userNav.textContent = `${user.firstName} ${user.lastName} (${user.totalPoints || 0} бали)`;
+            userNav.textContent = `${user.firstName} ${user.lastName} (${user.totalPoints || 0} балів)`;
         }
         if (submitSection) submitSection.style.display = 'block';
     };
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <tr>
                 <td>${index + 1}</td>
                 <td>${user.firstName} ${user.lastName}</td>
-                <td>${user.totalPoints || 0}</td>
+                <td>${submission.points}</td>
               </tr>
             `).join('');
             top10TableBody.innerHTML = html;
