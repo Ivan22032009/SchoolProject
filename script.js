@@ -255,24 +255,22 @@ document.addEventListener('DOMContentLoaded', () => {
             submitModal.style.display = 'none';
         }
     };
-    const loadTop10 = () => {
+    const loadTop10 = () => { // <-- Перенесено сюди
         fetch(`${API_BASE_URL}/api/top10`)
-          .then(response => response.json())
-          .then(data => {
-            const top10TableBody = document.querySelector('.top10-table tbody');
-            let html = data.map((user, index) => `
-              <tr>
-                <td>${index + 1}</td>
-                <td>${user.firstName} ${user.lastName}</td>
-                <td>${user.points}</td>
-              </tr>
-            `).join('');
-            top10TableBody.innerHTML = html;
-          })
-          .catch(error => console.error('Error loading top10:', error));
+            .then(response => response.json())
+            .then(data => {
+                const top10TableBody = document.querySelector('.top10-table tbody');
+                let html = data.map((user, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.firstName} ${user.lastName}</td>
+                        <td>${user.points}</td>
+                    </tr>
+                `).join('');
+                top10TableBody.innerHTML = html;
+            })
+            .catch(error => console.error('Error loading top10:', error));
     };
-        loadTop10();
-
     }
 });
     
