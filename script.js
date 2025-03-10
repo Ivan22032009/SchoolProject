@@ -74,42 +74,47 @@ document.addEventListener('DOMContentLoaded', () => {
             // Десктопний варіант (колаж)
             if (window.innerWidth > 1320) {
                 const cards = document.querySelectorAll('.desktop-collage .card');
+                let currentIndex = 0;  // Оголошуємо до циклу
                 cards.forEach((card, index) => {
                     card.addEventListener('click', () => {
-                        document.getElementById(`c${index + 1}`).checked = true;
+                        currentIndex = index;  // Оновлюємо currentIndex при кліку
+                        document.getElementById(`c${currentIndex + 1}`).checked = true;
                     });
                 });
-
-                let currentIndex = 0;
+                
                 collageInterval = setInterval(() => {
                     currentIndex = (currentIndex + 1) % cards.length;
                     document.getElementById(`c${currentIndex + 1}`).checked = true;
                 }, 5000);
+                
 
             // Мобільний варіант (слайдер)
             } else {
                 const slides = Array.from(document.querySelectorAll('.mobile-slider .item'));
                 const dotsContainer = document.querySelector('.mobile-slider .dots');
                 let currentSlide = 0;
-
+                
                 dotsContainer.innerHTML = '';
                 slides.forEach((_, i) => {
                     const dot = document.createElement('li');
                     if (i === 0) dot.classList.add('active');
-                    dot.addEventListener('click', () => goToSlide(i));
+                    dot.addEventListener('click', () => {
+                        currentSlide = i;  // Оновлюємо currentSlide
+                        goToSlide(i);
+                    });
                     dotsContainer.appendChild(dot);
                 });
-
+                
                 document.getElementById('next').addEventListener('click', () => {
                     currentSlide = (currentSlide + 1) % slides.length;
                     goToSlide(currentSlide);
                 });
-
+                
                 document.getElementById('prev').addEventListener('click', () => {
                     currentSlide = (currentSlide - 1 + slides.length) % slides.length;
                     goToSlide(currentSlide);
                 });
-
+                
                 function goToSlide(index) {
                     currentSlide = index;
                     const offset = -slides[index].offsetLeft;
@@ -119,11 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         dot.classList.toggle('active', i === index);
                     });
                 }
-
+                
                 sliderInterval = setInterval(() => {
                     currentSlide = (currentSlide + 1) % slides.length;
                     goToSlide(currentSlide);
-                }, 5000);
+                }, 5000);                
             }
         } // Закриваємо функцію initSliders правильно за допомогою "}"
 
