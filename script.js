@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Завантажити лідерборд одразу
     loadLeaderboard();
-
+    loadTop10();
     const chooseFileBtn = document.getElementById('chooseFileBtn');
     const photoInput = document.getElementById('photoInput');
   
@@ -271,13 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .catch(error => console.error('Error loading top10:', error));
     };
-      
-      // Викликаємо завантаження топ10 після завантаження сторінки
-      document.addEventListener('DOMContentLoaded', () => {
-        // ... ваш існуючий код ...
-        
         loadTop10();
-      });
+
     }
 });
     
