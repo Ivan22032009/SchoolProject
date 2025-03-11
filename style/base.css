@@ -14,15 +14,13 @@
   }
   /* Загальні стилі для навігації */
   nav {
-    margin-bottom: 0; 
-    background-color: #f2f8f2;
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.3s ease;
-    margin-bottom: 0
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    top: 0;
+    z-index: 1000;
   }
   .logo img {
     width: 210px;
@@ -79,23 +77,28 @@ nav a:hover {
 }
 
   .authButton {
-    background-color: #1f5f32; /* Темніший зелений */
+    background: rgb(72,230,47);
+    background: linear-gradient(90deg, rgba(72,230,47,0) 0%, rgba(32,230,227,1) 100%); /* Темніший зелений */
     color: #fff !important; 
-    padding: 8px 16px;
+    padding: 8px 16px; 
     border-radius: 6px;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    font-weight: bold;
+    transition: transform 0.3s ease, background 0.3s ease;
   }
   .authButton:hover {
-    background-color: #164925;
+    transform: scale(1.1);
+    background: rgb(32,230,227);
+background: linear-gradient(90deg, rgba(32,230,227,1) 0%, rgba(4,255,0,0) 100%);
   }
   /* Футер */
   footer {
-    background-color: #2d8442;
+    background: linear-gradient(to right, #3da657, #87CEEB);
     color: white;
-    padding: 2rem;
     text-align: center;
-    margin-top: 3rem;
+    padding: 30px;
+    margin-top: 60px;
+    font-size: 1em;
   }
   .footer-content {
     max-width: 1100px;
@@ -124,6 +127,23 @@ nav a:hover {
     background: #3da657;
     margin: 10px auto;
 }
+
+
+.section h1 {
+  color: #2d8442;
+  font-size: 1.8rem;
+  text-align: center;
+  position: relative;
+}
+
+.section h1:after {
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #3da657;
+  margin: 10px auto;
+}
+
   /* Інші загальні стилі (наприклад, для сіток, загальних кнопок, форм) */
   .menu-container {
     background-color: #66cccc; /* Можна змінити на потрібний відтінок */
@@ -346,4 +366,14 @@ nav a:hover {
     width: 100%;
     align-items: center;
   }
+}
+.menu-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Відстань між іконкою і текстом */
+}
+
+.menu-item i {
+  font-size: 1.2em; /* Розмір іконки */
+  color: #3da657; /* Колір іконки */
 }

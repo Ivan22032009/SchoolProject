@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'index.html';
             });
         }
+
         let collageInterval = null;
         let sliderInterval = null;
 

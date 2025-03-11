@@ -1,17 +1,117 @@
-.directions-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+/* Стилі для заголовків h2 з градієнтом */
+h2 {
+  font-size: 2.8rem;
+  background: linear-gradient(90deg, #2d8442, #1f5f32);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+/* Підкреслення для заголовків */
+h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #3da657;
+  margin: 10px auto;
+}
+
+/* Стилі для основного тексту з тінню */
+p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #333;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Стилі для карток у секції принципів */
+.mission-card {
+  background: linear-gradient(135deg, #f2f8f2, #e6f0e6);
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  padding: 2.5rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Ефект при наведенні на картки */
+.mission-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Стилі для заголовків у картках з іконками */
+.mission-card h3 {
+  font-size: 1.6rem;
+  color: #1f5f32;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Іконки для заголовків карток */
+.mission-card h3::before {
+  content: '🌿';
+  font-size: 1.8rem;
+}
+
+/* Стилі для списків із анімацією */
+.project-actions ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.project-actions ul li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s forwards;
+}
+
+.project-actions ul li::before {
+  content: "•";
+  color: #2d8442;
+  position: absolute;
+  left: 0;
+  font-size: 1.5rem;
+}
+
+/* Анімація для списків */
+@keyframes fadeInUp {
+  to {
+      opacity: 1;
+      transform: translateY(0);
   }
-  
-  .direction-item {
-    text-align: center;
+}
+
+/* Відступи між секціями */
+.section {
+  margin-bottom: 5rem;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeInSection 1s forwards;
+}
+
+/* Анімація для секцій */
+@keyframes fadeInSection {
+  to {
+      opacity: 1;
+      transform: translateY(0);
   }
-  
-  .direction-item img {
-    width: 64px; /* Підберіть розмір під ваш дизайн */
-    height: auto;
-    margin-bottom: 1rem;
-  }
-  
+}
+
+/* Стилі для тексту місії */
+.mission-statement {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #1f5f32;
+  background: linear-gradient(90deg, #2d8442, #1f5f32);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

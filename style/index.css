@@ -547,4 +547,73 @@ input:checked + label .description {
       font-size: 0.9rem;
     }
   }
- 
+ /* Анімація з’явлення */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Застосування анімації до карток */
+.mission-card, .step, .benefit {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.6s ease forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Затримка для послідовного з’явлення */
+.mission-card:nth-child(1), .step:nth-child(1), .benefit:nth-child(1) {
+    animation-delay: 0.2s;
+}
+.mission-card:nth-child(2), .step:nth-child(2), .benefit:nth-child(2) {
+    animation-delay: 0.4s;
+}
+.mission-card:nth-child(3), .step:nth-child(3), .benefit:nth-child(3) {
+    animation-delay: 0.6s;
+}
+.step:nth-child(4) {
+    animation-delay: 0.8s;
+}
+.step:nth-child(5) {
+    animation-delay: 1s;
+}
+
+/* Ефект при наведенні */
+.mission-card:hover, .step:hover, .benefit:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Вимкнення анімацій на мобільних */
+@media (max-width: 768px) {
+    .mission-card, .step, .benefit {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+}
+/* Анімація виїзду зліва */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Анімація виїзду справа */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
