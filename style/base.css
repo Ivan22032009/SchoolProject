@@ -155,7 +155,7 @@ background: linear-gradient(90deg, rgba(32,230,227,1) 0%, rgba(4,255,0,0) 100%);
 }
 /* Обгортка основного меню */
 .menu-primary-menu-container {
-  max-width: 1200px; /* Задайте потрібну ширину контейнера */
+  max-width: 1400px; /* Задайте потрібну ширину контейнера */
   margin: 0 auto;
   padding: 0 20px;
 }

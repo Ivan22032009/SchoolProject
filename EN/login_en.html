@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>EcoFast - Uman Ecological Initiative</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css'>
+    <link rel='stylesheet' href='../style/style_login.css'>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-in">
+            <form id="loginForm">
+                <h1>Sing in</h1>
+                <div class="social-icons">
+                    <!-- Соціальні іконки -->
+                </div>
+                <span>or use your email and password</span>
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
+                <a href="#">Forgot your password?</a>
+                <button type="submit">Sign in</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-up">
+            <form id="registerForm">
+                <h1>Registration</h1>
+                <div class="social-icons">
+                    <!-- Соціальні іконки -->
+                </div>
+                <span>or use your email to register</span>
+                <input type="text" id="registerFirstName" placeholder="Ім'я" required>
+                <input type="text" id="registerLastName" placeholder="Прізвище" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Пароль" required>
+                <button type="submit">Sign up</button>
+            </form>
+        </div>
+
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome back!</h1>
+                    <p>Enter your personal data to use all the features of the site</p>
+                    <button class="hidden" id="login">Увійти</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register your personal data to use all the features of the site</p>
+                    <button class="hidden" id="register">Sign up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='../script_login.js'></script>
+    <script src='../script.js'></script>
+</body>
+</html>

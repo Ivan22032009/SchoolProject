@@ -29,6 +29,29 @@ max-width: 1175px;
 margin: 0 auto 2rem;
 }
 
+.hero_en {
+    margin-bottom: 10px;
+    min-height: 400px;
+    width: 100%;
+    background-image: url("../img/hero_en.webp");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .hero_en h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    }
+    
+    .hero_en p {
+    font-size: 1.2rem;
+    max-width: 1175px;
+    margin: 0 auto 2rem;
+    }
+
 .section-benefits {
     position: relative; /* Щоб фон працював коректно */
     background: url("../img/wave.webp") no-repeat center bottom; 
