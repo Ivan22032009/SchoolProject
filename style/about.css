@@ -115,3 +115,12 @@ p {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.step{
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #1f5f32;
+    background: linear-gradient(90deg, #2d8442, #1f5f32);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
