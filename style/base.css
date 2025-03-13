@@ -511,3 +511,8 @@ background: linear-gradient(90deg, rgba(32,230,227,1) 0%, rgba(4,255,0,0) 100%);
     display: none;
   }
 }
+@media (max-width: 768px) {
+  .logo img{
+    background-image: url("../img/logo_mobile.webp");
+  }
+}
