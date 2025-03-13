@@ -78,7 +78,7 @@
     <main class="section">
 
       <div class="header-image">
-        <img src="img/header-about-image.webp" alt="Екологічна ініціатива EcoFast" width="1175" height="400">
+        <img src="img/header-about-image.webp" alt="Екологічна ініціатива EcoFast" width="1175" height="400" loading="lazy">
       </div>
 
         <!-- Вступ -->
@@ -100,7 +100,7 @@
 
         <section id="how-to-sort">
             <h2>Як сортувати сміття вдома?</h2>
-        <video controls class="about-video" width="700" height="394">
+        <video controls class="about-video" preload="none" width="700" height="394">
         <source src="img/1.mp4" type="video/mp4">
         Ваш браузер не підтримує відео.
         </video>
@@ -211,7 +211,7 @@
         
         <section id="mini-game">
           <h2>Міні гра</h2>
-          <video controls class="about-video">
+          <video controls class="about-video" preload="none">
               <source src="img/2.mp4" type="video/mp4">
               Ваш браузер не підтримує відео.
           </video>
@@ -231,6 +231,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
