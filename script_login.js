@@ -10,6 +10,20 @@ loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
 });
 
+document.querySelector('.close-btn').addEventListener('click', function() {
+    // Отримуємо поточний шлях сторінки
+    const currentPath = window.location.pathname;
+
+    // Перевіряємо, чи це login_en.html
+    if (currentPath.includes('login_en')) {
+        // Перенаправляємо на index_en.html
+        window.location.href = 'index_en.html';
+    } else {
+        // Якщо це не login_en, перенаправляємо на index.html
+        window.location.href = 'index.html';
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const API_BASE_URL = 'https://schoolproject-1-kkzu.onrender.com';
     let authToken = localStorage.getItem('authToken');

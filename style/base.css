@@ -378,3 +378,136 @@ background: linear-gradient(90deg, rgba(32,230,227,1) 0%, rgba(4,255,0,0) 100%);
   font-size: 1.2em; /* Розмір іконки */
   color: #3da657; /* Колір іконки */
 }
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: right 0.4s ease-in-out;
+}
+
+.mobile-menu.active {
+  display: block;
+  right: 0;
+}
+
+#close-menu {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #3da657;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#close-menu:hover {
+  color: #2d8442;
+  transform: rotate(90deg);
+}
+
+.mobile-menu-list {
+  list-style: none;
+  padding: 60px 20px 20px;
+  margin: 0;
+}
+
+.mobile-menu-list li {
+  margin-bottom: 20px;
+}
+
+.mobile-menu-list a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 8px;
+  background: linear-gradient(to right, #3da657 0%, #3da657 0%, transparent 0%);
+  background-size: 200% 100%;
+  background-position: right;
+  transition: all 0.4s ease;
+}
+
+.mobile-menu-list a:hover {
+  color: #fff;
+  background: linear-gradient(to right, #3da657 50%, #2d8442 100%);
+  background-size: 200% 100%;
+  background-position: left;
+}
+
+.mobile-menu-list a.login {
+  color: #3da657;
+  border: 2px solid #3da657;
+  text-align: center;
+}
+
+.mobile-menu-list a.login:hover {
+  color: #fff;
+  background: #3da657;
+  border-color: #2d8442;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.overlay.active {
+  display: block;
+}
+
+.mobile-menu-list li {
+  opacity: 0;
+  transform: translateX(20px);
+  animation: slideInLeft 0.3s ease forwards;
+}
+
+.mobile-menu-list li:nth-child(1) { animation-delay: 0.1s; }
+.mobile-menu-list li:nth-child(2) { animation-delay: 0.2s; }
+.mobile-menu-list li:nth-child(3) { animation-delay: 0.3s; }
+.mobile-menu-list li:nth-child(4) { animation-delay: 0.4s; }
+.mobile-menu-list li:nth-child(5) { animation-delay: 0.5s; }
+.mobile-menu-list li:nth-child(6) { animation-delay: 0.6s; }
+.mobile-menu-list li:nth-child(7) { animation-delay: 0.7s; }
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+  }
+  .menu-container{
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none;
+  }
+}

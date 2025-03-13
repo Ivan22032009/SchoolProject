@@ -277,3 +277,25 @@
 @media screen and (min-width: 1025px) {
     /* Існуючі стилі залишаються без змін */
 }
+.close-btn {
+    position: absolute;
+    top: 15px; /* Залишаємо фіксовану позицію */
+    right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px; /* Збільшуємо розмір хрестика */
+    color: #333;
+    cursor: pointer;
+    z-index: 1001;
+    width: 40px; /* Збільшуємо розмір контейнера */
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.3); /* Затемнений фон */
+    border-radius: 50%; /* Робимо фон круглим */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавний перехід для фону і кольору */
+}
+
+.close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.5); /* Темніший фон при наведенні */
+    color: #00b015; /* Залишаємо зелений колір при наведенні */
+}

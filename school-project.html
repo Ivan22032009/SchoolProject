@@ -13,12 +13,30 @@
 </head>
 <body>
     <nav>
-        <a href="index.html" class="logo"><img src="img/logo.webp" alt=""></a>
+        <a href="index.html" class="logo">
+          <img src="img/logo.webp" alt="EcoFast">
+          <span class="sr-only">Головна сторінка EcoFast</span>
+        </a>
         <div class="nav-links">
-            <span class="userNav" style="display: none; color: #3da657; padding: 8px 16px; border-radius: 6px;"></span>
-            <a href="login.html" class="authButton">Увійти</a> <!-- Оновлена кнопка -->
+          <span class="userNav" style="display: none; color: #3da657; padding: 8px 16px; border-radius: 6px;"></span>
+          <a href="login.html" class="authButton">Увійти</a>
         </div>
-    </nav>
+        <button class="hamburger" aria-label="Відкрити меню">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      
+      <div id="mobile-menu" class="mobile-menu">
+        <button id="close-menu" aria-label="Закрити меню">&times;</button>
+        <ul class="mobile-menu-list">
+          <li><a href="index.html">Головна</a></li>
+          <li><a href="about.html">Про проект</a></li>
+          <li><a href="ps.html">Правильне сортування</a></li>
+          <li><a href="points.html">Пункти сортування</a></li>
+          <li><a href="https://petition.e-dem.ua/uman/Petition/View/107">Міські петиції</a></li>
+          <li><a href="login.html" class="login">Увійти</a></li>
+        </ul>
+      </div>
     <div class="menu-container">
         <div class="menu-bg">
             <div class="ruby-container">

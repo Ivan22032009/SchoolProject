@@ -373,23 +373,83 @@ button:hover {
     height: 100%;
     object-fit: cover;
 }
-.slider .buttons{
+.slider .buttons {
     position: absolute;
     top: 45%;
     left: 5%;
     width: 90%;
     display: flex;
     justify-content: space-between;
+    z-index: 10; /* Щоб кнопки завжди були поверх слайдів */
 }
-.slider .buttons button{
+
+.slider .buttons button {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    background-color: rgba(31, 148, 10, 0.75);
+    background-color: #3da657; /* Основний зелений колір сайту */
     color: #fff;
     border: none;
-    font-family: monospace;
+    border-radius: 12px; /* Злегка заокруглені кути замість повного кола */
+    font-size: 1.5rem; /* Більший розмір стрілок */
+    font-family: Arial, sans-serif; /* Змінимо шрифт для сучасного вигляду */
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Тінь для глибини */
+    transition: all 0.3s ease; /* Плавна анімація для всіх змін */
+}
+
+/* Ефект при наведенні */
+.slider .buttons button:hover {
+    background-color: #2d8442; /* Темніший зелений при наведенні */
+    transform: translateY(-3px); /* Легке підняття кнопки */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); /* Посилена тінь */
+}
+
+/* Анімація при натисканні */
+.slider .buttons button:active {
+    transform: translateY(1px); /* Легке опускання при натисканні */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Менша тінь */
+}
+
+/* Іконки стрілок (замість тексту "<" і ">") */
+.slider .buttons button#prev::before {
+    content: "\f053"; /* Font Awesome іконка стрілки вліво */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+.slider .buttons button#next::before {
+    content: "\f054"; /* Font Awesome іконка стрілки вправо */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+/* Адаптивність для менших екранів */
+@media (max-width: 1300px) {
+    .slider .buttons button {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem; /* Менший розмір стрілок */
+    }
+}
+
+/* Додаткові стилі для кращої видимості на мобільних */
+@media (max-width: 768px) {
+    .slider .buttons {
+        top: 50%; /* Центруємо вертикально */
+        left: 3%;
+        width: 94%; /* Збільшуємо ширину контейнера */
+    }
+
+    .slider .buttons button {
+        background-color: rgba(61, 166, 87, 0.9); /* Трохи прозорий фон */
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
 }
 .slider .dots{
     position: absolute;

@@ -12,16 +12,31 @@
     <title>EcoFast - Екологічна ініціатива Умані</title>
 </head>
  <body>
-    <nav>
-        <a href="index.html" class="logo">
-            <img src="img/logo.webp" alt="EcoFast">
-            <span class="sr-only">Головна сторінка EcoFast</span>
-          </a>
-        <div class="nav-links">
-            <span class="userNav" style="display: none; color: #3da657; padding: 8px 16px; border-radius: 6px;"></span>
-            <a href="login.html" class="authButton">Увійти</a> <!-- Оновлена кнопка -->
-        </div>
-    </nav>
+  <nav>
+    <a href="index.html" class="logo">
+      <img src="img/logo.webp" alt="EcoFast">
+      <span class="sr-only">Головна сторінка EcoFast</span>
+    </a>
+    <div class="nav-links">
+      <span class="userNav" style="display: none; color: #3da657; padding: 8px 16px; border-radius: 6px;"></span>
+      <a href="login.html" class="authButton">Увійти</a>
+    </div>
+    <button class="hamburger" aria-label="Відкрити меню">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+  
+  <div id="mobile-menu" class="mobile-menu">
+    <button id="close-menu" aria-label="Закрити меню">&times;</button>
+    <ul class="mobile-menu-list">
+      <li><a href="index.html">Головна</a></li>
+      <li><a href="about.html">Про проект</a></li>
+      <li><a href="school-project.html">Проєкти, конкурси</a></li>
+      <li><a href="points.html">Пункти сортування</a></li>
+      <li><a href="https://petition.e-dem.ua/uman/Petition/View/107">Міські петиції</a></li>
+      <li><a href="login.html" class="login">Увійти</a></li>
+    </ul>
+  </div>
     <div class="menu-container">
         <div class="menu-bg">
             <div class="ruby-container">
@@ -193,6 +208,14 @@
           </ul>
         </section>
         
+        <section id="importance">
+          <h2>Міні гра</h2>
+          <video controls class="about-video">
+              <source src="img/2.mp4" type="video/mp4">
+              Ваш браузер не підтримує відео.
+          </video>
+        </section>
+
         <!-- Висновок -->
         <section id="conclusion">
           <h2>Висновок</h2>
